@@ -231,7 +231,7 @@ public class RNAssDrawable extends PoolObservable {
     public String getSequence() {
         String res = this.m_rnass.getGACU();
         while (res.length() > 0 && res.charAt(res.length() - 1) == ' ') {
-            res = res.substring(0, res.length() - 2);
+            res = res.substring(0, res.length() - 1);
         }
         return res;
     }
@@ -318,6 +318,7 @@ public class RNAssDrawable extends PoolObservable {
     }
 
     public RNAssDrawable setRNAssGACU(String s) throws RNAException {
+        // TODO VERIFY QUE YA JUSTE DES GACU!!!!!!!!!
         this.m_rnass.setGACU(s);
         draw();
         notifyObserversMod(NotifyMessage.UPDATE);
@@ -342,5 +343,9 @@ public class RNAssDrawable extends PoolObservable {
 
     public Boolean ContainVirtualGroup(GraphicObject go) {
         return this.m_graphicGroup == go;
+    }
+
+    public void setRNAssDotParentheses(String dp) throws RNAException {
+        setRNAssDotParentheses(dp, getSequence());
     }
 }
