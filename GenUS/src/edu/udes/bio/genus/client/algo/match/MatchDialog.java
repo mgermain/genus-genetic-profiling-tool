@@ -4,6 +4,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Grid;
@@ -27,6 +28,7 @@ public class MatchDialog extends DialogBox {
     private final MatchAlgoConfigWidget parent;
     private MatchAlgorithm algo;
     private final OptionClickHandler och;
+    private String currID;
 
     public MatchDialog(MatchAlgoConfigWidget parent, OptionClickHandler och) {
         Grid g;
@@ -62,24 +64,40 @@ public class MatchDialog extends DialogBox {
     private class StartClickHandler implements ClickHandler {
         @Override
         public void onClick(ClickEvent event) {
-            Image img;
 
             if (MatchDialog.this.parent.started == true) {
                 Window.alert("This algo has already been started.");
             } else {
                 if (MatchDialog.this.txtStrand.getValue() != MatchDialog.EMPTYSTRING && MatchDialog.this.txtStructure.getValue() != MatchDialog.EMPTYSTRING) {
-                    try {
-                        hide();
-                        MatchDialog.this.algo = new MatchAlgorithm(null, new RNAss[] { new RNAss(MatchDialog.this.txtStructure.getValue(), MatchDialog.this.txtStrand.getValue()) });
-                        MatchDialog.this.resolverService.resolveServer(MatchDialog.this.algo, new MatchCallback(MatchDialog.this.parent));
-                        MatchDialog.this.parent.started = true;
-                        MatchDialog.this.parent.imageContainer.clear();
-                        img = new Image(MatchDialog.this.parent.imagesBundle.pauseButtonIcon());
-                        img.addClickHandler(new PauseClickHandler());
-                        MatchDialog.this.parent.imageContainer.add(img);
-                    } catch (final RNAException e) {
-                        Window.alert(e.getMessage());
-                    }
+
+                    hide();
+                    MatchDialog.this.resolverService.getId(new AsyncCallback<String>() {
+
+                        @Override
+                        public void onSuccess(String result) {
+                            Image img;
+
+                            try {
+                                MatchDialog.this.currID = result;
+                                MatchDialog.this.algo = new MatchAlgorithm(null, new RNAss[] { new RNAss(MatchDialog.this.txtStructure.getValue(), MatchDialog.this.txtStrand.getValue()) });
+                                MatchDialog.this.resolverService.resolveServer(MatchDialog.this.currID, MatchDialog.this.algo, new MatchCallback(MatchDialog.this.parent));
+                                MatchDialog.this.parent.started = true;
+                                MatchDialog.this.parent.imageContainer.clear();
+                                img = new Image(MatchDialog.this.parent.imagesBundle.pauseButtonIcon());
+                                img.addClickHandler(new PauseClickHandler());
+                                MatchDialog.this.parent.imageContainer.add(img);
+                            } catch (final RNAException e) {
+                                Window.alert(e.getMessage());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Throwable caught) {
+                        // TODO Auto-generated method stub
+
+                        }
+                    });
+
                 } else {
                     Window.alert("All fields must be set.");
                 }
