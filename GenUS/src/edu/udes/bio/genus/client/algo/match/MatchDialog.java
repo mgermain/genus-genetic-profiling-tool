@@ -64,7 +64,7 @@ public class MatchDialog extends DialogBox {
     private class StartClickHandler implements ClickHandler {
         @Override
         public void onClick(ClickEvent event) {
-
+            Window.alert("mee!");
             if (MatchDialog.this.parent.started == true) {
                 Window.alert("This algo has already been started.");
             } else {
@@ -76,6 +76,8 @@ public class MatchDialog extends DialogBox {
                         @Override
                         public void onSuccess(String result) {
                             Image img;
+
+                            Window.alert("wee!");
 
                             try {
                                 MatchDialog.this.currID = result;
@@ -93,8 +95,8 @@ public class MatchDialog extends DialogBox {
 
                         @Override
                         public void onFailure(Throwable caught) {
-                        // TODO Auto-generated method stub
-
+                            // TODO Auto-generated method stub
+                            Window.alert(caught.getMessage());
                         }
                     });
 
