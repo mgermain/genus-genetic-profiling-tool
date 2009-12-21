@@ -34,12 +34,14 @@ public class ResolverServiceImpl extends RemoteServiceServlet implements Resolve
     public String getId() {
         long r;
 
+        System.out.println("meeee");
         synchronized (ResolverServiceImpl.syncroot) {
             r = ResolverServiceImpl.currId;
             ResolverServiceImpl.currId = (ResolverServiceImpl.currId + 1L) % (Long.MAX_VALUE - 1L);
         }
 
-        return "" + r;
+        System.out.println("weeee");
+        return String.valueOf(r);
     }
 
 }
