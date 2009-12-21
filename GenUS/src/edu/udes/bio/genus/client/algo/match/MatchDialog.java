@@ -71,40 +71,43 @@ public class MatchDialog extends DialogBox {
                 if (MatchDialog.this.txtStrand.getValue() != MatchDialog.EMPTYSTRING && MatchDialog.this.txtStructure.getValue() != MatchDialog.EMPTYSTRING) {
 
                     hide();
-                    MatchDialog.this.resolverService.getId(new AsyncCallback<String>() {
-
-                        @Override
-                        public void onSuccess(String result) {
-                            Image img;
-
-                            Window.alert("wee!");
-
-                            try {
-                                MatchDialog.this.currID = result;
-                                MatchDialog.this.algo = new MatchAlgorithm(null, new RNAss[] { new RNAss(MatchDialog.this.txtStructure.getValue(), MatchDialog.this.txtStrand.getValue()) });
-                                MatchDialog.this.resolverService.resolveServer(MatchDialog.this.currID, MatchDialog.this.algo, new MatchCallback(MatchDialog.this.parent));
-                                MatchDialog.this.parent.started = true;
-                                MatchDialog.this.parent.imageContainer.clear();
-                                img = new Image(MatchDialog.this.parent.imagesBundle.pauseButtonIcon());
-                                img.addClickHandler(new PauseClickHandler());
-                                MatchDialog.this.parent.imageContainer.add(img);
-                            } catch (final RNAException e) {
-                                Window.alert(e.getMessage());
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Throwable caught) {
-                            // TODO Auto-generated method stub
-                            Window.alert(caught.getMessage());
-                        }
-                    });
+                    MatchDialog.this.resolverService.getId(new IdCallback());
 
                 } else {
                     Window.alert("All fields must be set.");
                 }
             }
         }
+    }
+
+    private class IdCallback implements AsyncCallback<String> {
+
+        @Override
+        public void onFailure(Throwable caught) {
+            // TODO Auto-generated method stub
+            Window.alert(caught.getMessage());
+        }
+
+        @Override
+        public void onSuccess(String result) {
+            Image img;
+
+            Window.alert("wee!");
+
+            try {
+                MatchDialog.this.currID = result;
+                MatchDialog.this.algo = new MatchAlgorithm(null, new RNAss[] { new RNAss(MatchDialog.this.txtStructure.getValue(), MatchDialog.this.txtStrand.getValue()) });
+                MatchDialog.this.resolverService.startAlgo(MatchDialog.this.currID, MatchDialog.this.algo, new MatchCallback(MatchDialog.this.parent));
+                MatchDialog.this.parent.started = true;
+                MatchDialog.this.parent.imageContainer.clear();
+                img = new Image(MatchDialog.this.parent.imagesBundle.pauseButtonIcon());
+                img.addClickHandler(new PauseClickHandler());
+                MatchDialog.this.parent.imageContainer.add(img);
+            } catch (final RNAException e) {
+                Window.alert(e.getMessage());
+            }
+        }
+
     }
 
     private class CancelClickHandler implements ClickHandler {
@@ -117,7 +120,6 @@ public class MatchDialog extends DialogBox {
     private class PauseClickHandler implements ClickHandler {
         @Override
         public void onClick(ClickEvent event) {
-            // TODO
             Image img;
 
             MatchDialog.this.parent.imageContainer.clear();
