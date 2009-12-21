@@ -6,8 +6,6 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import edu.udes.bio.genus.client.pool.Pool;
-import edu.udes.bio.genus.client.rna.RNAssDrawable;
-import edu.udes.bio.genus.client.rna.RNAssDrawable.DrawStyle;
 import edu.udes.bio.genus.client.ui.canvas.Drawer;
 import edu.udes.bio.genus.client.ui.canvas.Scaler;
 import edu.udes.bio.genus.client.ui.menu.Menu;
@@ -56,15 +54,15 @@ public class GenUS extends AbsolutePanel implements EntryPoint {
 
         // ### TESTING : Add a strand to pool
         try {
-            final RNAssDrawable testStrand = new RNAssDrawable("..((((((((......))))))))..", "ACGUGCCACGAUUCAACGUGGCACAG", GenUS.displayArea);
-            testStrand.setName("TEST").scale(GenUS.displayArea.scaleFactor);
-
-            GenUS.rnaPool.addToPool(testStrand);
-
-            final RNAssDrawable testStrand2 = new RNAssDrawable(".(((....)..))..", "ACGUGCCACGAU", GenUS.displayArea);
-            testStrand.setName("TEST2").scale(GenUS.displayArea.scaleFactor).setDrawStyle(DrawStyle.Linear_Round);
-
-            GenUS.rnaPool.addToPool(testStrand2);
+            // final RNAssDrawable testStrand = new RNAssDrawable("..((((((((......))))))))..", "ACGUGCCACGAUUCAACGUGGCACAG", GenUS.displayArea);
+            // testStrand.setName("TEST").scale(GenUS.displayArea.scaleFactor);
+            //
+            // GenUS.rnaPool.addToPool(testStrand);
+            //
+            // final RNAssDrawable testStrand2 = new RNAssDrawable(".(((....)..))..", "ACGUGCCACGAU", GenUS.displayArea);
+            // testStrand.setName("TEST2").scale(GenUS.displayArea.scaleFactor).setDrawStyle(DrawStyle.Linear_Round);
+            //
+            // GenUS.rnaPool.addToPool(testStrand2);
 
             /*
              * for (int i = 0; i < 5; i++) { RNAssDrawable testStrand2 = new RNAssDrawable("..((......))", i + "  ", displayArea); testStrand2.setName("TEST" + i).scale(displayArea.scaleFactor); testStrand2.setDrawStyle(RNAssDrawable.DrawStyle.Linear_Round);
