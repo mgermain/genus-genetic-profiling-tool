@@ -14,7 +14,7 @@ public class RNAss extends AbstractCollection<Nucleotide> implements Serializabl
 	 */
     private static final long serialVersionUID = 1L;
     // ne pas mettre final le arraylist sinon ca serialize pas -- Gro_
-    private final ArrayList<Nucleotide> m_chain;
+    private ArrayList<Nucleotide> m_chain;
 
     public RNAss() {
         this.m_chain = new ArrayList<Nucleotide>();

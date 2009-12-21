@@ -5,5 +5,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 @RemoteServiceRelativePath("resolve")
 public interface ResolverService extends RemoteService {
-    AbsAlgorithm resolveServer(AbsAlgorithm algo);
+    AbsAlgorithm resolveServer(String id, AbsAlgorithm algo);
+
+    String getId();
 }
