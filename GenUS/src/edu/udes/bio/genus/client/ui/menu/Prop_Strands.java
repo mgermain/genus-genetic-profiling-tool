@@ -1,8 +1,16 @@
 package edu.udes.bio.genus.client.ui.menu;
 
+import java.util.Set;
+import java.util.TreeSet;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.DOM;
@@ -22,6 +30,10 @@ import edu.udes.bio.genus.client.rna.RNAException;
 import edu.udes.bio.genus.client.rna.RNAssDrawable;
 
 public class Prop_Strands extends AbsolutePanel {
+
+    private boolean updateStruct = false;
+    private boolean updateName = false;
+    private boolean updateSeq = false;
 
     private TextBox txtName = null;
     private TextBox txtDp = null;
@@ -90,9 +102,8 @@ public class Prop_Strands extends AbsolutePanel {
             @Override
             public void onChange(ChangeEvent event) {
                 try {
-                    Prop_Strands.this.rnass.setRNAssDotParentheses(Prop_Strands.this.txtDp.getText(), Prop_Strands.this.txtNuc.getText());
+                    Prop_Strands.this.rnass.setRNAssDotParentheses(Prop_Strands.this.txtDp.getText());
                 } catch (final RNAException e) {
-                    // TODO dire un erreur
                     Prop_Strands.this.txtDp.setText(Prop_Strands.this.rnass.getDotParentesis());
                 }
             }
@@ -111,20 +122,112 @@ public class Prop_Strands extends AbsolutePanel {
         this.txtNuc.setSize("400px", "20px");
         nucPanel.add(this.txtNuc);
 
-        final ChangeHandler nucChangeHandler = new ChangeHandler() {
+        final ChangeHandler seqChangeHandler = new ChangeHandler() {
             @Override
             public void onChange(ChangeEvent event) {
                 try {
                     Prop_Strands.this.rnass.setRNAssGACU(Prop_Strands.this.txtNuc.getText());
-                    Prop_Strands.this.txtNuc.setText(Prop_Strands.this.rnass.getSequence());
                 } catch (final RNAException e) {
-                    // TODO dire un erreur
-                    e.printStackTrace();
                     Prop_Strands.this.txtNuc.setText(Prop_Strands.this.rnass.getSequence());
                 }
             }
         };
-        this.txtNuc.addChangeHandler(nucChangeHandler);
+        this.txtNuc.addChangeHandler(seqChangeHandler);
+
+        // ADD AUTOUPDATER TO THE NAME TEXTBOX
+        final KeyUpHandler nameUpHandler = new KeyUpHandler() {
+            @Override
+            public void onKeyUp(KeyUpEvent event) {
+                if (Prop_Strands.this.updateName || KeyCodes.KEY_DELETE == event.getNativeKeyCode() || KeyCodes.KEY_BACKSPACE == event.getNativeKeyCode()) {
+                    Prop_Strands.this.updateName = false;
+                    Prop_Strands.this.rnass.setName(Prop_Strands.this.txtName.getText());
+                }
+            }
+        };
+        this.txtName.addKeyUpHandler(nameUpHandler);
+
+        final KeyPressHandler namePressHandler = new KeyPressHandler() {
+            @Override
+            public void onKeyPress(KeyPressEvent event) {
+                Prop_Strands.this.updateName = true;
+            }
+        };
+        this.txtName.addKeyPressHandler(namePressHandler);
+
+        // ADD FILTER TO THE SEQUENCE TEXTBOX
+        final Set<Character> seqAllowedChars = new TreeSet<Character>();
+        seqAllowedChars.add('G');
+        seqAllowedChars.add('A');
+        seqAllowedChars.add('C');
+        seqAllowedChars.add('U');
+        seqAllowedChars.add(' ');
+
+        final KeyUpHandler seqUpHandler = new KeyUpHandler() {
+            @Override
+            public void onKeyUp(KeyUpEvent event) {
+                if (Prop_Strands.this.updateSeq || KeyCodes.KEY_DELETE == event.getNativeKeyCode() || KeyCodes.KEY_BACKSPACE == event.getNativeKeyCode()) {
+                    Prop_Strands.this.updateSeq = false;
+                    Prop_Strands.this.txtNuc.setText(Prop_Strands.this.txtNuc.getText().toUpperCase());
+                    try {
+                        Prop_Strands.this.rnass.setRNAssGACU(Prop_Strands.this.txtNuc.getText());
+                    } catch (final RNAException e) {
+                        Prop_Strands.this.txtNuc.cancelKey();
+                    }
+                }
+            }
+        };
+        this.txtNuc.addKeyUpHandler(seqUpHandler);
+
+        final KeyPressHandler seqPressHandler = new KeyPressHandler() {
+            @Override
+            public void onKeyPress(KeyPressEvent event) {
+                final Character c = Character.toUpperCase(event.getCharCode());
+
+                if (seqAllowedChars.contains(c)) {
+                    Prop_Strands.this.updateSeq = true;
+                } else {
+                    Prop_Strands.this.txtNuc.cancelKey();
+                }
+            }
+        };
+        this.txtNuc.addKeyPressHandler(seqPressHandler);
+
+        // ADD FILTER TO THE Structure TEXTBOX
+        final Set<Character> strucAllowedChars = new TreeSet<Character>();
+        strucAllowedChars.add('.');
+        strucAllowedChars.add('(');
+        strucAllowedChars.add(')');
+
+        final KeyUpHandler structUpHandler = new KeyUpHandler() {
+            @Override
+            public void onKeyUp(KeyUpEvent event) {
+                if (Prop_Strands.this.updateStruct || KeyCodes.KEY_DELETE == event.getNativeKeyCode() || KeyCodes.KEY_BACKSPACE == event.getNativeKeyCode()) {
+                    Prop_Strands.this.updateStruct = false;
+                    try {
+                        Prop_Strands.this.rnass.setRNAssDotParentheses(Prop_Strands.this.txtDp.getText());
+                    } catch (final RNAException e) {
+                        if (!e.getMessage().equals("Parentheses are not matching.") && !e.getMessage().startsWith("Missing")) {
+                            Prop_Strands.this.txtDp.cancelKey();
+                        }
+                    }
+                }
+            }
+        };
+        this.txtDp.addKeyUpHandler(structUpHandler);
+
+        final KeyPressHandler structPressHandler = new KeyPressHandler() {
+            @Override
+            public void onKeyPress(KeyPressEvent event) {
+                final Character c = event.getCharCode();
+
+                if (strucAllowedChars.contains(c)) {
+                    Prop_Strands.this.updateStruct = true;
+                } else {
+                    Prop_Strands.this.txtDp.cancelKey();
+                }
+            }
+        };
+        this.txtDp.addKeyPressHandler(structPressHandler);
 
         // Dropdown for color type
         final HorizontalPanel oPanel = new HorizontalPanel();
