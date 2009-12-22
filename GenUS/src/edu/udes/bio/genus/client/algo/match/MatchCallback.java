@@ -55,7 +55,7 @@ public class MatchCallback implements AsyncCallback<AbsAlgorithm> {
 
         hp = new HorizontalPanel();
         hp.add(new Label("Strand : "));
-        hp.add(new Label(result.getStructsResult()[0].rna.getGACU()));
+        hp.add(new Label(result.getStructsResult()[0].rna.getSequence()));
         vp.add(hp);
 
         hp = new HorizontalPanel();
