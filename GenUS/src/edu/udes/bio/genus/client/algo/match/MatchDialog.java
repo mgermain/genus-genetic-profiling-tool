@@ -3,6 +3,7 @@ package edu.udes.bio.genus.client.algo.match;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.http.client.Request;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -28,7 +29,9 @@ public class MatchDialog extends DialogBox {
     private final MatchAlgoConfigWidget parent;
     private MatchAlgorithm algo;
     private final OptionClickHandler och;
-    private String currID;
+    public String currID;
+
+    public Request algoRequest;
 
     public MatchDialog(MatchAlgoConfigWidget parent, OptionClickHandler och) {
         Grid g;
@@ -64,7 +67,6 @@ public class MatchDialog extends DialogBox {
     private class StartClickHandler implements ClickHandler {
         @Override
         public void onClick(ClickEvent event) {
-            Window.alert("mee!");
             if (MatchDialog.this.parent.started == true) {
                 Window.alert("This algo has already been started.");
             } else {
@@ -92,17 +94,20 @@ public class MatchDialog extends DialogBox {
         public void onSuccess(String result) {
             Image img;
 
-            Window.alert("wee!");
-
             try {
                 MatchDialog.this.currID = result;
                 MatchDialog.this.algo = new MatchAlgorithm(null, new RNAss[] { new RNAss(MatchDialog.this.txtStructure.getValue(), MatchDialog.this.txtStrand.getValue()) });
-                MatchDialog.this.resolverService.startAlgo(MatchDialog.this.currID, MatchDialog.this.algo, new MatchCallback(MatchDialog.this.parent));
-                MatchDialog.this.parent.started = true;
-                MatchDialog.this.parent.imageContainer.clear();
+                MatchDialog.this.algoRequest = MatchDialog.this.resolverService.startAlgo(MatchDialog.this.currID, MatchDialog.this.algo, new MatchCallback(MatchDialog.this.parent));
+                if (MatchDialog.this.parent != null) {
+                    MatchDialog.this.parent.started = true;
+                    MatchDialog.this.parent.imageContainer.clear();
+                }
+
                 img = new Image(MatchDialog.this.parent.imagesBundle.pauseButtonIcon());
                 img.addClickHandler(new PauseClickHandler());
-                MatchDialog.this.parent.imageContainer.add(img);
+                if (MatchDialog.this.parent != null) {
+                    MatchDialog.this.parent.imageContainer.add(img);
+                }
             } catch (final RNAException e) {
                 Window.alert(e.getMessage());
             }
@@ -114,19 +119,46 @@ public class MatchDialog extends DialogBox {
         @Override
         public void onClick(ClickEvent event) {
             hide();
+            sendCancel();
         }
     }
 
     private class PauseClickHandler implements ClickHandler {
         @Override
         public void onClick(ClickEvent event) {
-            Image img;
 
-            MatchDialog.this.parent.imageContainer.clear();
-            img = new Image(MatchDialog.this.parent.imagesBundle.playButtonIcon());// Image("Red_X.png");
-            img.addClickHandler(MatchDialog.this.och);
-            MatchDialog.this.parent.imageContainer.add(img);
+            sendCancel();
+
         }
     }
 
+    public void sendCancel() {
+        Image img;
+
+        this.algoRequest.cancel();
+        if (this.parent != null) {
+            MatchDialog.this.parent.imageContainer.clear();
+        }
+        img = new Image(MatchDialog.this.parent.imagesBundle.playButtonIcon());// Image("Red_X.png");
+        img.addClickHandler(MatchDialog.this.och);
+        if (this.parent != null) {
+            MatchDialog.this.parent.imageContainer.add(img);
+        }
+
+        this.resolverService.stopAlgo(this.currID, new CancelCallback());
+    }
+
+    private class CancelCallback implements AsyncCallback<Void> {
+
+        @Override
+        public void onFailure(Throwable caught) {
+            // TODO Auto-generated method stub
+            Window.alert(caught.getMessage());
+        }
+
+        @Override
+        public void onSuccess(Void result) {
+        // TODO Auto-generated method stub
+        }
+    }
 }

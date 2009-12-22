@@ -15,6 +15,15 @@ public abstract class AbsAlgorithm implements Serializable {
     protected RNAss structs[];
     protected WrapperRNA strandsResult[];
     protected WrapperRNA structsResult[];
+    protected boolean shouldStop = false;
+
+    public boolean shouldStop() {
+        return this.shouldStop;
+    }
+
+    public void setShouldStop(boolean shouldStop) {
+        this.shouldStop = shouldStop;
+    }
 
     public abstract void execute();
 

@@ -71,6 +71,11 @@ public class MatchAlgoConfigWidget extends AbsAlgoWidget {
     private class CancelClickHandler implements ClickHandler {
         @Override
         public void onClick(ClickEvent event) {
+
+            MatchAlgoConfigWidget.this.dialog.algoRequest.cancel();
+
+            MatchAlgoConfigWidget.this.dialog.sendCancel();
+
             removeFromParent();
         }
     }
