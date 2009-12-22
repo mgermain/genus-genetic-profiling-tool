@@ -10,7 +10,7 @@ import edu.udes.bio.genus.client.algo.ResolverService;
 public class ResolverServiceImpl extends RemoteServiceServlet implements ResolverService {
 
     private static Object syncroot = new Object();
-    private static HashMap<String, Thread> tasks = new HashMap<String, Thread>();
+    private static HashMap<String, AbsAlgorithm> tasks = new HashMap<String, AbsAlgorithm>();
     private static long currId = 0;
 
     /**
@@ -25,7 +25,7 @@ public class ResolverServiceImpl extends RemoteServiceServlet implements Resolve
             if (ResolverServiceImpl.tasks.containsKey(id)) {
                 ResolverServiceImpl.tasks.remove(id);
             }
-            ResolverServiceImpl.tasks.put(id, Thread.currentThread());
+            ResolverServiceImpl.tasks.put(id, algo);
         }
 
         algo.execute();
@@ -50,13 +50,16 @@ public class ResolverServiceImpl extends RemoteServiceServlet implements Resolve
         return String.valueOf(r);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void stopAlgo(String id) {
         synchronized (ResolverServiceImpl.syncroot) {
-            if (ResolverServiceImpl.tasks.containsKey(id)) {
-                ResolverServiceImpl.tasks.get(id).stop();
-                ResolverServiceImpl.tasks.remove(id);
+            try {
+                if (ResolverServiceImpl.tasks.containsKey(id)) {
+                    ResolverServiceImpl.tasks.get(id).setShouldStop(true); // .stop();
+                    ResolverServiceImpl.tasks.remove(id);
+                }
+            } catch (final Exception e) {
+                System.out.println(e.getMessage());
             }
         }
     }
