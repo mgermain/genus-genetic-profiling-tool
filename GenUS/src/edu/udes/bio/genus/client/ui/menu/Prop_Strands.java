@@ -27,6 +27,7 @@ import com.objetdirect.tatami.client.gfx.Color;
 
 import edu.udes.bio.genus.client.GenUS;
 import edu.udes.bio.genus.client.rna.RNAException;
+import edu.udes.bio.genus.client.rna.RNAIncompleteException;
 import edu.udes.bio.genus.client.rna.RNAssDrawable;
 
 public class Prop_Strands extends AbsolutePanel {
@@ -205,6 +206,8 @@ public class Prop_Strands extends AbsolutePanel {
                     Prop_Strands.this.updateStruct = false;
                     try {
                         Prop_Strands.this.rnass.setRNAssDotParentheses(Prop_Strands.this.txtDp.getText());
+                    } catch (final RNAIncompleteException e) {
+
                     } catch (final RNAException e) {
                         if (!e.getMessage().equals("Parentheses are not matching.") && !e.getMessage().startsWith("Missing")) {
                             Prop_Strands.this.txtDp.cancelKey();
