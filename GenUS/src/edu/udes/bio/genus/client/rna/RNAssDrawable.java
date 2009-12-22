@@ -2,14 +2,11 @@ package edu.udes.bio.genus.client.rna;
 
 import java.util.HashMap;
 
-import com.objetdirect.tatami.client.gfx.Circle;
 import com.objetdirect.tatami.client.gfx.Color;
-import com.objetdirect.tatami.client.gfx.GraphicCanvas;
 import com.objetdirect.tatami.client.gfx.GraphicObject;
 import com.objetdirect.tatami.client.gfx.Line;
 import com.objetdirect.tatami.client.gfx.Path;
 import com.objetdirect.tatami.client.gfx.Point;
-import com.objetdirect.tatami.client.gfx.Text;
 
 import edu.udes.bio.genus.client.pool.PoolObservable;
 import edu.udes.bio.genus.client.ui.canvas.Drawer;
@@ -25,11 +22,11 @@ public class RNAssDrawable extends PoolObservable {
     protected boolean m_visible;
     protected String m_name;
     protected Color m_color;
-    protected GraphicCanvas m_gc;
+    protected Drawer m_gc;
     protected CostumVirtualGroup m_graphicGroup;
     protected RNAss m_rnass;
 
-    public RNAssDrawable(RNAss r, GraphicCanvas c, int x, int y, int scale, Color color, DrawStyle style, boolean visible, String name) {
+    public RNAssDrawable(RNAss r, Drawer c, int x, int y, float scale, Color color, DrawStyle style, boolean visible, String name) {
         this.m_graphicGroup = new CostumVirtualGroup();
         this.m_gc = c;
         this.m_rnass = r;
@@ -43,23 +40,23 @@ public class RNAssDrawable extends PoolObservable {
         this.m_graphicGroup.scale(scale);
     }
 
-    public RNAssDrawable(String strDp, String strGacu, int x, int y, int scale, Color color, DrawStyle style, boolean visible, String name, GraphicCanvas c) throws RNAException {
+    public RNAssDrawable(String strDp, String strGacu, int x, int y, int scale, Color color, DrawStyle style, boolean visible, String name, Drawer c) throws RNAException {
         this(new RNAss(strDp, strGacu), c, x, y, scale, color, style, visible, name);
     }
 
-    public RNAssDrawable(String strDp, String strGacu, int scale, Color color, DrawStyle drawStyle, String name, GraphicCanvas c) throws RNAException {
+    public RNAssDrawable(String strDp, String strGacu, int scale, Color color, DrawStyle drawStyle, String name, Drawer c) throws RNAException {
         this(new RNAss(strDp, strGacu), c, c.getOffsetWidth() / 2, c.getOffsetHeight() / 2, scale, color, drawStyle, true, name);
     }
 
-    public RNAssDrawable(RNAss r, GraphicCanvas c) {
-        this(r, c, c.getOffsetWidth() / 2, c.getOffsetHeight() / 2, 1, Color.TEAL, DrawStyle.Linear_Squared, true, r.getDotParentheses());
+    public RNAssDrawable(RNAss r, Drawer c) {
+        this(r, c, c.getOffsetWidth() / 2, c.getOffsetHeight() / 2, (float) c.scaleFactor, Color.TEAL, DrawStyle.Linear_Squared, true, r.getDotParentheses());
     }
 
     public RNAssDrawable(Drawer c) throws RNAException {
         this(new RNAss("", ""), c);
     }
 
-    public RNAssDrawable(String strDp, String strGacu, GraphicCanvas c) throws RNAException {
+    public RNAssDrawable(String strDp, String strGacu, Drawer c) throws RNAException {
         this(new RNAss(strDp, strGacu), c);
     }
 
@@ -106,7 +103,7 @@ public class RNAssDrawable extends PoolObservable {
     }
 
     private void draw_linear(boolean squaredLink) {
-        final int center = (this.m_rnass.size() * RNAssDrawable.NUCLEOTIDE_DISTANCE / 2);
+        final int center = ((this.m_rnass.size() - 1) * RNAssDrawable.NUCLEOTIDE_DISTANCE / 2);
         int cur_pos = 0;
         final HashMap<Nucleotide, Point> positions = new HashMap<Nucleotide, Point>();
         for (final Nucleotide cur : this.m_rnass) {
@@ -153,12 +150,7 @@ public class RNAssDrawable extends PoolObservable {
     }
 
     private void addNode(Point pos, int r, String ribose) {
-        final GraphicObject cir = new Circle(r).setFillColor(getColor());
-        cir.translate((int) pos.getX(), (int) pos.getY());
-        this.m_graphicGroup.add(cir);
-        final GraphicObject t = new Text(ribose).setFillColor(Color.WHITE).setStrokeColor(Color.WHITE);
-        t.translate((int) pos.getX() - r / 2, (int) pos.getY() + r / 2).scale(1.5f);
-        this.m_graphicGroup.add(t);
+        this.m_graphicGroup.add(new NucleotideGO(r, ribose).translate((int) pos.getX(), (int) pos.getY()));
     }
 
     private int getLinkHeight(Nucleotide a, Nucleotide b) {
