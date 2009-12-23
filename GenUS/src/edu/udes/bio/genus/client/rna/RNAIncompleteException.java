@@ -28,6 +28,11 @@ package edu.udes.bio.genus.client.rna;
 public class RNAIncompleteException extends RNAException {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = -2116443861727822255L;
+
+    /**
      * Instantiates a new RNA incomplete exception.
      * 
      * @param msg
