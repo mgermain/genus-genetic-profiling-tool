@@ -60,6 +60,12 @@ public class DrawerListener implements GraphicObjectListener {
     public void mouseMoved(GraphicObject graphicObject, Event event) {
         int newX, newY, xMove, yMove;
 
+        if (graphicObject != null) {
+            this.dr.setStyleName("pointerCursor");
+        } else {
+            this.dr.setStyleName("moveCursor");
+        }
+
         if (this.holding == true) {
             newX = event.getClientX();
             newY = event.getClientY();
