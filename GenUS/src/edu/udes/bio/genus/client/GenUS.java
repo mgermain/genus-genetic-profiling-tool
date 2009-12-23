@@ -77,26 +77,26 @@ public class GenUS extends AbsolutePanel implements EntryPoint {
         this.add(GenUS.propMenu, Window.getClientWidth() - 502, Window.getClientHeight() - 125);
 
         // ### TESTING : Add a strand to pool
-        try {
-            // final RNAssDrawable testStrand = new RNAssDrawable("..((((((((......))))))))..", "ACGUGCCACGAUUCAACGUGGCACAG", GenUS.displayArea);
-            // testStrand.setName("TEST").scale(GenUS.displayArea.scaleFactor);
-            //
-            // GenUS.rnaPool.addToPool(testStrand);
-            //
-            // final RNAssDrawable testStrand2 = new RNAssDrawable(".(((....)..))..", "ACGUGCCACGAU", GenUS.displayArea);
-            // testStrand.setName("TEST2").scale(GenUS.displayArea.scaleFactor).setDrawStyle(DrawStyle.Linear_Round);
-            //
-            // GenUS.rnaPool.addToPool(testStrand2);
-
-            /*
-             * for (int i = 0; i < 5; i++) { RNAssDrawable testStrand2 = new RNAssDrawable("..((......))", i + "  ", displayArea); testStrand2.setName("TEST" + i).scale(displayArea.scaleFactor); testStrand2.setDrawStyle(RNAssDrawable.DrawStyle.Linear_Round);
-             * 
-             * rnaPool.addToPool(testStrand2); }
-             */
-
-        } catch (final Exception e) {
-            Window.alert("TESTING STRAND ERROR GOTTA FIX TAHT SHIT: " + e.getMessage());
-        }
+        // try {
+        // // final RNAssDrawable testStrand = new RNAssDrawable("..((((((((......))))))))..", "ACGUGCCACGAUUCAACGUGGCACAG", GenUS.displayArea);
+        // // testStrand.setName("TEST").scale(GenUS.displayArea.scaleFactor);
+        // //
+        // // GenUS.rnaPool.addToPool(testStrand);
+        // //
+        // // final RNAssDrawable testStrand2 = new RNAssDrawable(".(((....)..))..", "ACGUGCCACGAU", GenUS.displayArea);
+        // // testStrand.setName("TEST2").scale(GenUS.displayArea.scaleFactor).setDrawStyle(DrawStyle.Linear_Round);
+        // //
+        // // GenUS.rnaPool.addToPool(testStrand2);
+        //
+        // /*
+        // * for (int i = 0; i < 5; i++) { RNAssDrawable testStrand2 = new RNAssDrawable("..((......))", i + "  ", displayArea); testStrand2.setName("TEST" + i).scale(displayArea.scaleFactor); testStrand2.setDrawStyle(RNAssDrawable.DrawStyle.Linear_Round);
+        // *
+        // * rnaPool.addToPool(testStrand2); }
+        // */
+        //
+        // } catch (final Exception e) {
+        // Window.alert("TESTING STRAND ERROR GOTTA FIX TAHT SHIT: " + e.getMessage());
+        // }
     }
 
 }
