@@ -1,16 +1,23 @@
 package edu.udes.bio.genus.client.ui.menu;
 
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
+
+import edu.udes.bio.genus.client.rna.RNAss;
 
 public class Prop_Sequences extends PopupPanel {
     private String sequence = "";
     private TextBox txtName = null;
     private TextBox txtSequence = null;
+
+    private VerticalPanel panel = new VerticalPanel();
 
     private void setTextBoxName() {
         this.txtName = new TextBox();
@@ -22,17 +29,19 @@ public class Prop_Sequences extends PopupPanel {
         this.txtSequence.setSize("400px", "20px");
 
         // ADD FILTER TO THE SEQUENCE TEXTBOX
-        // final ChangeHandler seqChangeHandler = new ChangeHandler() {
-        // @Override
-        // public void onChange(ChangeEvent event) {
-        // try {
-        // Prop_Strands.this.rnass.setRNAssGACU(Prop_Strands.this.txtSequence.getText());
-        // } catch (final RNAException e) {
-        // Prop_Strands.this.txtSequence.setText(Prop_Strands.this.rnass.getSequence());
-        // }
-        // }
-        // };
-        // this.txtSequence.addChangeHandler(seqChangeHandler);
+        final ChangeHandler seqChangeHandler = new ChangeHandler() {
+            @Override
+            public void onChange(ChangeEvent event) {
+                Prop_Sequences.this.txtSequence.setText(Prop_Sequences.this.txtSequence.getText().toUpperCase());
+
+                if (!RNAss.validateSequence(Prop_Sequences.this.txtSequence.getText())) {
+                    Prop_Sequences.this.sequence = Prop_Sequences.this.txtSequence.getText();
+                } else {
+                    Prop_Sequences.this.txtSequence.setText(Prop_Sequences.this.sequence);
+                }
+            }
+        };
+        this.txtSequence.addChangeHandler(seqChangeHandler);
 
         final KeyUpHandler seqUpHandler = new KeyUpHandler() {
             @Override
@@ -60,13 +69,15 @@ public class Prop_Sequences extends PopupPanel {
     }
 
     public Prop_Sequences() {
-        center();//
+        center();
         setModal(true);
 
-        // setTextBoxName();
+        add(this.panel);
+
+        setTextBoxName();
         setTextBoxSequence();
 
-        // add(this.txtName);
-        add(this.txtSequence);
+        this.panel.add(this.txtName);
+        this.panel.add(this.txtSequence);
     }
 }
