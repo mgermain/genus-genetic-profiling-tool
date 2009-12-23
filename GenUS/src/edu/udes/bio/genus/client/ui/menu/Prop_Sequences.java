@@ -95,6 +95,7 @@ public class Prop_Sequences extends PopupPanel {
 
     public Prop_Sequences() {
         center();
+        setPopupPosition(getAbsoluteLeft() - (500 / 2), getAbsoluteTop() - 100);
         setAnimationEnabled(true);
         setModal(true);
 

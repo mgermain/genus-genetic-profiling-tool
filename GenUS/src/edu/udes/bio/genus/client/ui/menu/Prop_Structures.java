@@ -96,6 +96,7 @@ public class Prop_Structures extends PopupPanel {
 
     public Prop_Structures() {
         center();
+        setPopupPosition(getAbsoluteLeft() - (500 / 2), getAbsoluteTop() - 100);
         setAnimationEnabled(true);
         setModal(true);
 
