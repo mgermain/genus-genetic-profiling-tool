@@ -10,7 +10,7 @@ public class Menu extends HorizontalPanel {
     private final StackPanel menu = new StackPanel();
 
     final public Menu_Sequences seqMenu = new Menu_Sequences();
-    final public Menu_Configs structMenu = new Menu_Configs();
+    final public Menu_Structures structMenu = new Menu_Structures();
 
     public Menu() {
         super();
@@ -35,9 +35,9 @@ public class Menu extends HorizontalPanel {
         final MenuAlgo algoMenu = new MenuAlgo(195);
         this.menu.add(algoMenu, "ALGORITHMS");
 
-        // Add the CONFIG sub menu
-        final Menu_Configs configMenu = new Menu_Configs();
-        this.menu.add(configMenu, "CONFIGS");
+        // // Add the CONFIG sub menu
+        // final Menu_Configs configMenu = new Menu_Configs();
+        // this.menu.add(configMenu, "CONFIGS");
 
         // Create and setup the hide button
         final CustomButton btnHide = new CustomButton("<<", ">>") {
