@@ -127,7 +127,7 @@ public class Prop_Strands extends AbsolutePanel {
             @Override
             public void onChange(ChangeEvent event) {
                 try {
-                    Prop_Strands.this.rnass.setRNAssGACU(Prop_Strands.this.txtNuc.getText());
+                    Prop_Strands.this.rnass.setRNAssSequence(Prop_Strands.this.txtNuc.getText());
                 } catch (final RNAException e) {
                     Prop_Strands.this.txtNuc.setText(Prop_Strands.this.rnass.getSequence());
                 }
@@ -170,7 +170,7 @@ public class Prop_Strands extends AbsolutePanel {
                     Prop_Strands.this.updateSeq = false;
                     Prop_Strands.this.txtNuc.setText(Prop_Strands.this.txtNuc.getText().toUpperCase());
                     try {
-                        Prop_Strands.this.rnass.setRNAssGACU(Prop_Strands.this.txtNuc.getText());
+                        Prop_Strands.this.rnass.setRNAssSequence(Prop_Strands.this.txtNuc.getText());
                     } catch (final RNAException e) {
                         Prop_Strands.this.txtNuc.cancelKey();
                     }
