@@ -1,3 +1,22 @@
+/*
+ * GenUS: Genetic Profiling Tool v.1.0
+ * Copyright (C) 2009 Université de Sherbrooke
+ * Contact: code.google.com/p/genus-genetic-profiling-tool/
+ * 
+ * This is a free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3.0 of the License, or any later version.
+ * 
+ * This project is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY. See the GNU
+ * Lesser General Public License for more details.
+ *  
+ * Contributors: Mathieu Germain, Gabriel Girard, Alex Rouillard, Alexei Nordell-Markovits
+ * 
+ * December 2009
+ * 
+ */
 package edu.udes.bio.genus.client.algo.match;
 
 import com.google.gwt.core.client.GWT;
@@ -19,6 +38,9 @@ import edu.udes.bio.genus.client.algo.match.MatchAlgoConfigWidget.OptionClickHan
 import edu.udes.bio.genus.client.rna.RNAException;
 import edu.udes.bio.genus.client.rna.RNAss;
 
+/**
+ * The Class MatchDialog.
+ */
 public class MatchDialog extends DialogBox {
     protected final static String EMPTYSTRING = "";
 
@@ -29,9 +51,21 @@ public class MatchDialog extends DialogBox {
     private final MatchAlgoConfigWidget parent;
     private MatchAlgorithm algo;
     private final OptionClickHandler och;
+
+    /** The current algorithm id. */
     public String currID;
 
+    /** The algorithm request. */
     public Request algoRequest;
+
+    /**
+     * Instantiates a new match dialog.
+     * 
+     * @param parent
+     *            the parent
+     * @param och
+     *            the option click handler
+     */
 
     public MatchDialog(MatchAlgoConfigWidget parent, OptionClickHandler och) {
         Grid g;
@@ -43,7 +77,7 @@ public class MatchDialog extends DialogBox {
         g = new Grid(3, 2);
         g.setPixelSize(250, 250);
 
-        // chaine, séquence, go
+        // strands, sequence
         g.setWidget(0, 0, new Label("Strand : "));
         this.txtStrand = new TextBox();
         g.setWidget(0, 1, this.txtStrand);
@@ -86,7 +120,6 @@ public class MatchDialog extends DialogBox {
 
         @Override
         public void onFailure(Throwable caught) {
-            // TODO Auto-generated method stub
             Window.alert(caught.getMessage());
         }
 
@@ -126,12 +159,14 @@ public class MatchDialog extends DialogBox {
     private class PauseClickHandler implements ClickHandler {
         @Override
         public void onClick(ClickEvent event) {
-
             sendCancel();
 
         }
     }
 
+    /**
+     * Send cancel.
+     */
     public void sendCancel() {
         Image img;
 
@@ -150,20 +185,16 @@ public class MatchDialog extends DialogBox {
         if (this.parent.started == true) {
             this.resolverService.stopAlgo(this.currID, new CancelCallback());
         }
-
     }
 
     private class CancelCallback implements AsyncCallback<Void> {
 
         @Override
         public void onFailure(Throwable caught) {
-            // TODO Auto-generated method stub
             Window.alert(caught.getMessage());
         }
 
         @Override
-        public void onSuccess(Void result) {
-        // TODO Auto-generated method stub
-        }
+        public void onSuccess(Void result) {}
     }
 }

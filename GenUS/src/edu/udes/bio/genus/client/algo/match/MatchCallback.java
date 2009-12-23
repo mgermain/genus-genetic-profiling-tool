@@ -1,3 +1,22 @@
+/*
+ * GenUS: Genetic Profiling Tool v.1.0
+ * Copyright (C) 2009 Université de Sherbrooke
+ * Contact: code.google.com/p/genus-genetic-profiling-tool/
+ * 
+ * This is a free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3.0 of the License, or any later version.
+ * 
+ * This project is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY. See the GNU
+ * Lesser General Public License for more details.
+ *  
+ * Contributors: Mathieu Germain, Gabriel Girard, Alex Rouillard, Alexei Nordell-Markovits
+ * 
+ * December 2009
+ * 
+ */
 package edu.udes.bio.genus.client.algo.match;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -18,6 +37,9 @@ import edu.udes.bio.genus.client.algo.AbsAlgorithm;
 import edu.udes.bio.genus.client.algo.WrapperRNA;
 import edu.udes.bio.genus.client.rna.RNAssDrawable;
 
+/**
+ * The Class MatchCallback.
+ */
 public class MatchCallback implements AsyncCallback<AbsAlgorithm> {
     MatchAlgoConfigWidget parent;
     DialogBox db;
@@ -25,16 +47,27 @@ public class MatchCallback implements AsyncCallback<AbsAlgorithm> {
     AbsAlgorithm result;
     TextBox txtName;
 
+    /**
+     * Instantiates a new match callback.
+     * 
+     * @param parent
+     *            the callback parent
+     */
     public MatchCallback(MatchAlgoConfigWidget parent) {
         this.parent = parent;
     }
 
     @Override
     public void onFailure(Throwable caught) {
-        // TODO dekoi de plus beau
+        // TODO should do something better here
         Window.alert(caught.getMessage());
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.google.gwt.user.client.rpc.AsyncCallback#onSuccess(java.lang.Object)
+     */
     @Override
     public void onSuccess(AbsAlgorithm result) {
         VerticalPanel vp;
