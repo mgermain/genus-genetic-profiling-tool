@@ -1,3 +1,22 @@
+/*
+ * GenUS: Genetic Profiling Tool v.1.0
+ * Copyright (C) 2009 Université de Sherbrooke
+ * Contact: code.google.com/p/genus-genetic-profiling-tool/
+ * 
+ * This is a free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3.0 of the License, or any later version.
+ * 
+ * This project is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY. See the GNU
+ * Lesser General Public License for more details.
+ *  
+ * Contributors: Mathieu Germain, Gabriel Girard, Alex Rouillard, Alexei Nordell-Markovits
+ * 
+ * December 2009
+ * 
+ */
 package edu.udes.bio.genus.client.ui.menu;
 
 import java.util.HashMap;
@@ -27,7 +46,13 @@ public class Menu_Algo extends Composite {
     private static final String[] algoNames = { "Match Algorithm" };
     private static final AlgoWidgetMaker[] algoClasses = { new MatchAlgoWidgetMaker() };
 
-    public Menu_Algo(int pxWidth) {//
+    /**
+     * Instantiates a new algo menu.
+     * 
+     * @param pxWidth
+     *            the width of the menu
+     */
+    public Menu_Algo(int pxWidth) {
         super();
 
         VerticalPanel vp;
@@ -47,10 +72,8 @@ public class Menu_Algo extends Composite {
         }
 
         vp.add(makeTopAlgos());
-
         vp.add(this.algosPanel);
         // vp.add(new MatchAlgoConfigWidget(pxWidth - 5));
-
         initWidget(vp);
     }
 
@@ -82,11 +105,8 @@ public class Menu_Algo extends Composite {
         @Override
         public void onClick(ClickEvent event) {
             AbsAlgoWidget w;
-
             w = Menu_Algo.this.algos.get(Menu_Algo.this.lb.getValue(Menu_Algo.this.lb.getSelectedIndex())).getWidget(Menu_Algo.this.widgetWidth);
-
             Menu_Algo.this.algosPanel.add(w);
-
             w.showOptions();
         }
 

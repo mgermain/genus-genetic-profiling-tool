@@ -1,3 +1,22 @@
+/*
+ * GenUS: Genetic Profiling Tool v.1.0
+ * Copyright (C) 2009 Université de Sherbrooke
+ * Contact: code.google.com/p/genus-genetic-profiling-tool/
+ * 
+ * This is a free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3.0 of the License, or any later version.
+ * 
+ * This project is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY. See the GNU
+ * Lesser General Public License for more details.
+ *  
+ * Contributors: Mathieu Germain, Gabriel Girard, Alex Rouillard, Alexei Nordell-Markovits
+ * 
+ * December 2009
+ * 
+ */
 package edu.udes.bio.genus.client.ui.menu;
 
 import com.google.gwt.core.client.GWT;
@@ -21,22 +40,45 @@ import com.google.gwt.user.client.ui.SimpleCheckBox;
 import edu.udes.bio.genus.client.GenUS;
 import edu.udes.bio.genus.client.rna.RNAssDrawable;
 
+/**
+ * The Class Strand.
+ */
 public class Strand extends HorizontalPanel {//
 
     private RNAssDrawable poolObj = null;
     private final SimpleCheckBox cbxDisplay = new SimpleCheckBox();
     private final Label sName = new Label();
 
+    /**
+     * The Interface StrandImageBundle.
+     */
     public interface StrandImageBundle extends ClientBundle {
+
+        /**
+         * Details button icon.
+         * 
+         * @return the image resource
+         */
         @Source("details.png")
         public ImageResource detailsButtonIcon();
 
+        /**
+         * Cancel button icon.
+         * 
+         * @return the image resource
+         */
         @Source("red_x.png")
         public ImageResource cancelButtonIcon();
     }
 
     StrandImageBundle imagesBundle = GWT.create(StrandImageBundle.class);
 
+    /**
+     * Instantiates a new strand.
+     * 
+     * @param o
+     *            the drawable object
+     */
     public Strand(RNAssDrawable o) {
         super();
         this.poolObj = o;
@@ -75,7 +117,6 @@ public class Strand extends HorizontalPanel {//
         btnEdit.setTitle("Details");
         add(btnEdit);
 
-        // TODO Include the image in the project
         final Image iD = new Image(this.imagesBundle.cancelButtonIcon());
         final CustomButton btnDel = new CustomButton(iD) {
             @Override
@@ -109,10 +150,18 @@ public class Strand extends HorizontalPanel {//
         addDomHandler(leaveHandler, MouseOutEvent.getType());
     }
 
+    /**
+     * Gets the name.
+     * 
+     * @return the name
+     */
     public String getName() {
         return this.sName.getText();
     }
 
+    /**
+     * Update name. Set the name length to fit the menu width.
+     */
     public void updateName() {
         final int maxWidth = 14;
         this.sName.setTitle(this.poolObj.getName());

@@ -1,3 +1,22 @@
+/*
+ * GenUS: Genetic Profiling Tool v.1.0
+ * Copyright (C) 2009 Université de Sherbrooke
+ * Contact: code.google.com/p/genus-genetic-profiling-tool/
+ * 
+ * This is a free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3.0 of the License, or any later version.
+ * 
+ * This project is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY. See the GNU
+ * Lesser General Public License for more details.
+ *  
+ * Contributors: Mathieu Germain, Gabriel Girard, Alex Rouillard, Alexei Nordell-Markovits
+ * 
+ * December 2009
+ * 
+ */
 package edu.udes.bio.genus.client.ui.menu;
 
 import java.util.Set;
@@ -34,6 +53,9 @@ import edu.udes.bio.genus.client.rna.RNAException;
 import edu.udes.bio.genus.client.rna.RNAIncompleteException;
 import edu.udes.bio.genus.client.rna.RNAssDrawable;
 
+/**
+ * The Class Prop_Strands.
+ */
 public class Prop_Strands extends AbsolutePanel {
 
     private boolean updateStruct = false;
@@ -50,7 +72,16 @@ public class Prop_Strands extends AbsolutePanel {
     private VerticalPanel basePropertiesPanel = null;
     private RNAssDrawable rnass;
 
+    /**
+     * The Interface PropImageBundle.
+     */
     public interface PropImageBundle extends ClientBundle {
+
+        /**
+         * Hide button icon.
+         * 
+         * @return the image resource
+         */
         @Source("hide.png")
         public ImageResource hideButtonIcon();
     }
@@ -102,8 +133,8 @@ public class Prop_Strands extends AbsolutePanel {
         final Callback cb = new Callback() {
             @Override
             public void onSuggestionsReady(Request request, Response response) {
-                // TODO Auto-generated method stub
-                
+            // TODO Auto-generated method stub
+
             }
         };
 
@@ -347,6 +378,9 @@ public class Prop_Strands extends AbsolutePanel {
         this.setVisible(true);
     }
 
+    /**
+     * Show the area.
+     */
     public void show() {
         init();
 
@@ -363,22 +397,29 @@ public class Prop_Strands extends AbsolutePanel {
 
     };
 
-    public void show(final RNAssDrawable po) {
+    /**
+     * Show.
+     * 
+     * @param rnassdrawable
+     *            show properties of that object
+     * 
+     */
+    public void show(final RNAssDrawable rnassdrawable) {
         init();
-        this.rnass = po;
-        this.txtName.setText(po.getName());
-        this.txtStructure.setText(po.getDotParentesis());
-        this.txtSequence.setText(po.getSequence());
+        this.rnass = rnassdrawable;
+        this.txtName.setText(rnassdrawable.getName());
+        this.txtStructure.setText(rnassdrawable.getDotParentesis());
+        this.txtSequence.setText(rnassdrawable.getSequence());
 
         for (int i = 0; i < this.lbColor.getItemCount(); i++) {
-            if (this.lbColor.getValue(i).equals(po.getColor().toHex())) {
+            if (this.lbColor.getValue(i).equals(rnassdrawable.getColor().toHex())) {
                 this.lbColor.setSelectedIndex(i);
                 break;
             }
         }
 
         for (int i = 0; i < this.lbStyle.getItemCount(); i++) {
-            if (this.lbStyle.getValue(i).equals(po.getDrawStyle().name())) {
+            if (this.lbStyle.getValue(i).equals(rnassdrawable.getDrawStyle().name())) {
                 this.lbStyle.setSelectedIndex(i);
                 break;
             }
