@@ -16,7 +16,7 @@ import edu.udes.bio.genus.client.algo.AbsAlgoWidget;
 import edu.udes.bio.genus.client.algo.AlgoWidgetMaker;
 import edu.udes.bio.genus.client.algo.match.MatchAlgoWidgetMaker;
 
-public class MenuAlgo extends Composite {
+public class Menu_Algo extends Composite {
 
     private final VerticalPanel algosPanel;
     private ListBox lb;
@@ -27,7 +27,7 @@ public class MenuAlgo extends Composite {
     private static final String[] algoNames = { "Match Algorithm" };
     private static final AlgoWidgetMaker[] algoClasses = { new MatchAlgoWidgetMaker() };
 
-    public MenuAlgo(int pxWidth) {//
+    public Menu_Algo(int pxWidth) {//
         super();
 
         VerticalPanel vp;
@@ -42,8 +42,8 @@ public class MenuAlgo extends Composite {
         this.algosPanel.setWidth("100%");
 
         this.algos = new HashMap<String, AlgoWidgetMaker>();
-        for (int i = 0; i < MenuAlgo.algoNames.length; i++) {
-            this.algos.put(MenuAlgo.algoNames[i], MenuAlgo.algoClasses[i]);
+        for (int i = 0; i < Menu_Algo.algoNames.length; i++) {
+            this.algos.put(Menu_Algo.algoNames[i], Menu_Algo.algoClasses[i]);
         }
 
         vp.add(makeTopAlgos());
@@ -64,7 +64,7 @@ public class MenuAlgo extends Composite {
         hp = new HorizontalPanel();
         hp.add(new Label("Algo : "));
         this.lb = new ListBox();
-        for (final String algoName : MenuAlgo.algoNames) {
+        for (final String algoName : Menu_Algo.algoNames) {
             this.lb.addItem(algoName);
         }
         hp.add(this.lb);
@@ -83,9 +83,9 @@ public class MenuAlgo extends Composite {
         public void onClick(ClickEvent event) {
             AbsAlgoWidget w;
 
-            w = MenuAlgo.this.algos.get(MenuAlgo.this.lb.getValue(MenuAlgo.this.lb.getSelectedIndex())).getWidget(MenuAlgo.this.widgetWidth);
+            w = Menu_Algo.this.algos.get(Menu_Algo.this.lb.getValue(Menu_Algo.this.lb.getSelectedIndex())).getWidget(Menu_Algo.this.widgetWidth);
 
-            MenuAlgo.this.algosPanel.add(w);
+            Menu_Algo.this.algosPanel.add(w);
 
             w.showOptions();
         }
