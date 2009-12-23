@@ -120,7 +120,11 @@ public class MatchDialog extends DialogBox {
 
         @Override
         public void onFailure(Throwable caught) {
-            Window.alert(caught.getMessage());
+            if (!caught.getMessage().equals("")) {
+                Window.alert(caught.getMessage());
+            } else {
+                Window.alert("Server not found.");
+            }
         }
 
         @Override
@@ -152,6 +156,8 @@ public class MatchDialog extends DialogBox {
         @Override
         public void onClick(ClickEvent event) {
             hide();
+            // GenUS.rnaPool.removeFromPool(Strand.this.poolObj);
+
             sendCancel();
         }
     }

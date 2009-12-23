@@ -24,6 +24,8 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -116,6 +118,7 @@ public class MatchAlgoConfigWidget extends AbsAlgoWidget {
         this.imageContainer.add(img);
         img = new Image(this.imagesBundle.cancelButtonIcon());
         img.addClickHandler(new CancelClickHandler());
+        img.setTitle("Press Ctrl to delete without confirmation.");
         hp.add(img);
         this.dialog = new MatchDialog(this, new OptionClickHandler());
         initWidget(hp);
@@ -125,8 +128,11 @@ public class MatchAlgoConfigWidget extends AbsAlgoWidget {
         @Override
         public void onClick(ClickEvent event) {
             // MatchAlgoConfigWidget.this.dialog.algoRequest.cancel();
-            MatchAlgoConfigWidget.this.dialog.sendCancel();
-            removeFromParent();
+            if (DOM.eventGetCtrlKey(DOM.eventGetCurrentEvent()) || Window.confirm("Are you sure you want to delete this algo ?")) {
+
+                MatchAlgoConfigWidget.this.dialog.sendCancel();
+                removeFromParent();
+            }
         }
     }
 
