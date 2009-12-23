@@ -1,3 +1,22 @@
+/*
+ * GenUS: Genetic Profiling Tool v.1.0
+ * Copyright (C) 2009 Université de Sherbrooke
+ * Contact: code.google.com/p/genus-genetic-profiling-tool/
+ * 
+ * This is a free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3.0 of the License, or any later version.
+ * 
+ * This project is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY. See the GNU
+ * Lesser General Public License for more details.
+ *  
+ * Constributors: Mathieu Germain, Gabriel Girard, Alex Rouillard, Alexei Nordell-Markovits
+ * 
+ * December 2009
+ * 
+ */
 package edu.udes.bio.genus.client.ui.canvas;
 
 import com.google.gwt.user.client.Event;
@@ -6,13 +25,25 @@ import com.objetdirect.tatami.client.gfx.GraphicObjectListener;
 
 import edu.udes.bio.genus.client.rna.RNAssDrawable;
 
+/**
+ * The listener interface for receiving drawer events.
+ * 
+ */
 public class DrawerListener implements GraphicObjectListener {
     private boolean holding;
     private int x, y;
     private final Drawer dr;
+
+    /** The RNAss drawable listened. */
     public RNAssDrawable rna;
     private boolean rnaSet;
 
+    /**
+     * Instantiates a new drawer listener.
+     * 
+     * @param dr
+     *            the drawer
+     */
     public DrawerListener(Drawer dr) {
         this.dr = dr;
         this.rnaSet = false;
@@ -20,17 +51,10 @@ public class DrawerListener implements GraphicObjectListener {
     }
 
     @Override
-    public void mouseClicked(GraphicObject graphicObject, Event event) {
-    /*
-     * for (RNAssDrawable rna :this.dr.drawedObjects){ if (rna.ContainVirtualGroup(graphicObject.getGroup())) { rna.rotate(5); } }
-     */
-    }
+    public void mouseClicked(GraphicObject graphicObject, Event event) {}
 
     @Override
-    public void mouseDblClicked(GraphicObject graphicObject, Event event) {
-    // TODO Auto-generated method stub
-
-    }
+    public void mouseDblClicked(GraphicObject graphicObject, Event event) {}
 
     @Override
     public void mouseMoved(GraphicObject graphicObject, Event event) {
@@ -47,7 +71,6 @@ public class DrawerListener implements GraphicObjectListener {
             }
 
             if (this.rnaSet == false) {
-                // Window.alert("weee");
                 reDrawAllTranslation(xMove, yMove);
             }
 
@@ -88,22 +111,23 @@ public class DrawerListener implements GraphicObjectListener {
         }
 
         if (this.rnaSet == false) {
-            // Window.alert("weee");
             reDrawAllTranslation(xMove, yMove);
         }
-        // this.reDrawAllTranslation(xMove, yMove);
-
         this.rna = null;
         this.rnaSet = false;
     }
 
     private void reDrawAllTranslation(int moveX, int moveY) {
-
         for (final RNAssDrawable po : this.dr.pool.getAll()) {
             po.translate(moveX, moveY);
         }
     }
 
+    /**
+     * Checks if is holding.
+     * 
+     * @return true, if is holding
+     */
     public boolean isHolding() {
         return this.holding;
     }
