@@ -30,7 +30,6 @@ import com.objetdirect.tatami.client.gfx.Point;
 import edu.udes.bio.genus.client.pool.PoolObservable;
 import edu.udes.bio.genus.client.ui.canvas.Drawer;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class RNAssDrawable.
  * 
@@ -599,23 +598,6 @@ public class RNAssDrawable extends PoolObservable {
      * 
      * @param dp
      *            the dot parentheses input
-     * @param seq
-     *            the sequence
-     * 
-     * @return this
-     * 
-     * @throws RNAException
-     */
-    public RNAssDrawable setRNAssDotParentheses(String dp, String seq) throws RNAException {
-        this.m_rnass.setSequence(seq);
-        return setRNAssDotParentheses(dp);
-    }
-
-    /**
-     * Sets the RNAss structure from dot parentheses.
-     * 
-     * @param dp
-     *            the dot parentheses input
      * 
      * @return this
      * 
@@ -623,7 +605,6 @@ public class RNAssDrawable extends PoolObservable {
      */
     public RNAssDrawable setRNAssDotParentheses(String dp) throws RNAException {
         this.m_rnass.setDotParentesis(dp);
-        setRNAssDotParentheses(dp, getSequence());
         draw();
         notifyObserversMod(NotifyMessage.UPDATE);
         return this;
