@@ -12,7 +12,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class Menu_Structures extends VerticalPanel {
 
-    public final List<Sequence> seqList = new ArrayList<Sequence>();
+    public final List<Structure> structList = new ArrayList<Structure>();
 
     public Menu_Structures() {
         super();
@@ -28,23 +28,23 @@ public class Menu_Structures extends VerticalPanel {
         class AddRnaStrandButtonClick implements ClickHandler {
             @Override
             public void onClick(ClickEvent event) {
-                final Prop_Sequences p = new Prop_Sequences();
+                final Prop_Structures p = new Prop_Structures();
                 p.show();
             }
         }
-        final Button btnAddStrands = new Button("Add Sequence", new AddRnaStrandButtonClick());
+        final Button btnAddStrands = new Button("Add Structure", new AddRnaStrandButtonClick());
         btnAddStrands.setWidth("80%");
         add(btnAddStrands);
     }
 
-    public void addNewSequence(String name, String seq) {
-        final Sequence s = new Sequence(name, seq);
+    public void addNewStrucure(String name, String struct) {
+        final Structure s = new Structure(name, struct);
         add(s);
-        this.seqList.add(s);
+        this.structList.add(s);
     }
 
-    public void removeSequence(Sequence seq) {
-        remove(seq);
-        this.seqList.remove(seq);
+    public void removeStructure(Structure struct) {
+        remove(struct);
+        this.structList.remove(struct);
     }
 }
