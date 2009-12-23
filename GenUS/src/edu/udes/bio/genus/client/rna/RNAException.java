@@ -12,7 +12,7 @@
  * but WITHOUT ANY WARRANTY. See the GNU
  * Lesser General Public License for more details.
  *  
- * Constributors: Mathieu Germain, Gabriel Girard, Alex Rouillard, Alexei Nordell-Markovits
+ * Contributors: Mathieu Germain, Gabriel Girard, Alex Rouillard, Alexei Nordell-Markovits
  * 
  * December 2009
  * 
