@@ -27,39 +27,35 @@ public class MatchAlgorithm extends AbsAlgorithm {
         this.structsResult[0] = null;
         int match = 0;
 
-        // while (!this.shouldStop) {
-        // System.out.println("jjkjkjkj");
-        // }
-
         if (this.structs != null && this.structs.length == 1) {
             this.structsResult[0] = new WrapperRNA();
             this.structsResult[0].rna = this.structs[0];
             for (final Nucleotide n : this.structsResult[0].rna) {
-                if (n.m_linked_previus) {
-                    switch (n.m_linked.m_ribose) {
+                if (n.isLinkedEnd) {
+                    switch (n.linked.ribose) {
                     case 'G':
-                        if (n.m_ribose != 'C') {
-                            n.m_ribose = ' ';
+                        if (n.ribose != 'C') {
+                            n.ribose = ' ';
                         }
                         break;
                     case 'A':
-                        if (n.m_ribose != 'U') {
-                            n.m_ribose = ' ';
+                        if (n.ribose != 'U') {
+                            n.ribose = ' ';
                         }
                         break;
                     case 'C':
-                        if (n.m_ribose != 'G') {
-                            n.m_ribose = ' ';
+                        if (n.ribose != 'G') {
+                            n.ribose = ' ';
                         }
                         break;
                     case 'U':
-                        if (n.m_ribose != 'A') {
-                            n.m_ribose = ' ';
+                        if (n.ribose != 'A') {
+                            n.ribose = ' ';
                         }
                         break;
                     }
                 }
-                if (n.m_ribose != ' ') {
+                if (n.ribose != ' ') {
                     match++;
                 }
             }
