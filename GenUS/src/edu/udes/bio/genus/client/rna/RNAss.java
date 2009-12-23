@@ -1,3 +1,22 @@
+/*
+ * GenUS: Genetic Profiling Tool v.1.0
+ * Copyright (C) 2009 Université de Sherbrooke
+ * Contact: code.google.com/p/genus-genetic-profiling-tool/
+ * 
+ * This is a free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3.0 of the License, or any later version.
+ * 
+ * This project is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY. See the GNU
+ * Lesser General Public License for more details.
+ *  
+ * Constributors: Mathieu Germain, Gabriel Girard, Alex Rouillard, Alexei Nordell-Markovits
+ * 
+ * December 2009
+ * 
+ */
 package edu.udes.bio.genus.client.rna;
 
 import java.io.Serializable;
@@ -6,50 +25,77 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Stack;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class RNAss.
+ */
 public class RNAss extends AbstractCollection<Nucleotide> implements Serializable {
 
-    /**
-	 * 
-	 */
     private static final long serialVersionUID = 1L;
-    private ArrayList<Nucleotide> m_chain;
+    private ArrayList<Nucleotide> nucleotideChain;
 
+    /**
+     * Instantiates a new RNA secondary structure.
+     */
     public RNAss() {
-        this.m_chain = new ArrayList<Nucleotide>();
+        this.nucleotideChain = new ArrayList<Nucleotide>();
     }
 
+    /**
+     * Instantiates a new RNA secondary structure.
+     * 
+     * @param input
+     *            a dot parenthesis string input.
+     * 
+     * @throws RNAException
+     */
     public RNAss(String input) throws RNAException {
         this();
         fromDotParentheses(input);
     }
 
-    public RNAss(String input, String GACU) throws RNAException {
+    /**
+     * Instantiates a new rN ass.
+     * 
+     * @param input
+     *            a dot parenthesis string input.
+     * @param sequence
+     *            the ribose sequence
+     * 
+     * @throws RNAException
+     */
+    public RNAss(String input, String sequence) throws RNAException {
         this(input);
-        setSequence(GACU);
+        setSequence(sequence);
     }
 
     @Override
     public int size() {
-        if (this.m_chain != null) {
-            return this.m_chain.size();
+        if (this.nucleotideChain != null) {
+            return this.nucleotideChain.size();
         }
         return 0;
     }
 
     @Override
     public Iterator<Nucleotide> iterator() {
-        if (this.m_chain != null) {
-            return this.m_chain.iterator();
+        if (this.nucleotideChain != null) {
+            return this.nucleotideChain.iterator();
         }
         return null;
     }
 
+    /**
+     * Gets the dot parentheses string.
+     * 
+     * @return the dot parentheses string.
+     */
     public String getDotParentheses() {
         String result = "";
-        for (final Nucleotide cur : this.m_chain) {
-            if (cur.m_linked == null) {
+        for (final Nucleotide cur : this.nucleotideChain) {
+            if (cur.linked == null) {
                 result += ".";
-            } else if (cur.m_linked_previus) {
+            } else if (cur.isLinkedEnd) {
                 result += ")";
             } else {
                 result += "(";
@@ -58,33 +104,62 @@ public class RNAss extends AbstractCollection<Nucleotide> implements Serializabl
         return result;
     }
 
+    /**
+     * Sets the secondary structure from a dot parentheses string.
+     * 
+     * @param dotParentesis
+     *            the new structure
+     * 
+     * @throws RNAException
+     */
     public void setDotParentesis(String dotParentesis) throws RNAException {
         validateDotParentesese(dotParentesis);
-        this.m_chain.clear();
+        this.nucleotideChain.clear();
         fromDotParentheses(dotParentesis);
     }
 
+    /**
+     * Gets the sequence.
+     * 
+     * @return the sequence
+     */
     public String getSequence() {
         String result = "";
-        for (final Nucleotide n : this.m_chain) {
-            result += n.m_ribose;
+        for (final Nucleotide n : this.nucleotideChain) {
+            result += n.ribose;
         }
         return result;
     }
 
+    /**
+     * Validate sequence.
+     * 
+     * @param seq
+     *            the sequence
+     * 
+     * @return true, if matches [GACU ]
+     */
     public boolean validateSequence(String seq) {
         return seq.matches("[GACU ]*?");
     }
 
+    /**
+     * Sets the sequence.
+     * 
+     * @param seq
+     *            the new sequence
+     * 
+     * @throws RNAException
+     */
     public void setSequence(String seq) throws RNAException {
         seq = seq.toUpperCase();
         if (validateSequence(seq)) {
             int i = 0;
-            for (; i < seq.length() && i < this.m_chain.size(); i++) {
-                this.m_chain.get(i).m_ribose = seq.charAt(i);
+            for (; i < seq.length() && i < this.nucleotideChain.size(); i++) {
+                this.nucleotideChain.get(i).ribose = seq.charAt(i);
             }
-            for (; i < this.m_chain.size(); i++) {
-                this.m_chain.get(i).m_ribose = ' ';
+            for (; i < this.nucleotideChain.size(); i++) {
+                this.nucleotideChain.get(i).ribose = ' ';
             }
         } else {
             throw new RNAException(seq + " contains invalid characters.");
@@ -122,22 +197,22 @@ public class RNAss extends AbstractCollection<Nucleotide> implements Serializabl
             cur = new Nucleotide();
             if (element == '(') {
                 toBeLinked.push(cur);
-                cur.m_linked_previus = false;
+                cur.isLinkedEnd = false;
             } else if (element == ')') {
                 try {
-                    toBeLinked.peek().m_linked = cur;
-                    cur.m_linked = toBeLinked.pop();
-                    cur.m_linked_previus = true;
+                    toBeLinked.peek().linked = cur;
+                    cur.linked = toBeLinked.pop();
+                    cur.isLinkedEnd = true;
                 } catch (final Exception e) {
                     e.printStackTrace();
                 }
             }
             if (previus != null) {
-                previus.m_next = cur;
+                previus.next = cur;
             }
-            cur.m_previus = previus;
+            cur.previous = previus;
             previus = cur;
-            this.m_chain.add(cur);
+            this.nucleotideChain.add(cur);
         }
     }
 
