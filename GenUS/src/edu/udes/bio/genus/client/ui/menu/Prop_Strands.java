@@ -37,8 +37,8 @@ public class Prop_Strands extends AbsolutePanel {
     private boolean updateSeq = false;
 
     private TextBox txtName = null;
-    private TextBox txtDp = null;
-    private TextBox txtNuc = null;
+    private TextBox txtStructure = null;
+    private TextBox txtSequence = null;
     private ListBox lbColor = null;
     private ListBox lbStyle = null;
     private CustomButton btnHide = null;
@@ -53,31 +53,11 @@ public class Prop_Strands extends AbsolutePanel {
 
     private final PropImageBundle imagesBundle = GWT.create(PropImageBundle.class);
 
-    private void init() {
-        clear();
-        this.basePropertiesPanel = new VerticalPanel();
-        this.basePropertiesPanel.setBorderWidth(0);
-        this.basePropertiesPanel.setSize("500px", "125px");
-        this.add(this.basePropertiesPanel);
-
+    private void setTextBoxName() {
         this.txtName = new TextBox();
-        this.txtDp = new TextBox();
-        this.txtNuc = new TextBox();
-        this.lbColor = new ListBox();
-        this.lbStyle = new ListBox();
-
-        // // Block for name panel
-        final HorizontalPanel namePanel = new HorizontalPanel();
-        namePanel.setWidth("500px");
-        this.basePropertiesPanel.add(namePanel);
-
-        final Label lblName = new Label("Name");
-        lblName.setSize("100px", "20px");
-        namePanel.add(lblName);
-
         this.txtName.setSize("400px", "20px");
-        namePanel.add(this.txtName);
 
+        // ADD AUTOUPDATER TO THE NAME TEXTBOX
         final ChangeHandler nameChangeHandler = new ChangeHandler() {
             @Override
             public void onChange(ChangeEvent event) {
@@ -86,56 +66,6 @@ public class Prop_Strands extends AbsolutePanel {
         };
         this.txtName.addChangeHandler(nameChangeHandler);
 
-        // // Block for dp entry
-        final HorizontalPanel dpPanel = new HorizontalPanel();
-        dpPanel.setWidth("500px");
-        this.basePropertiesPanel.add(dpPanel);
-
-        final Label lblDp = new Label("Structure");
-        lblDp.setTitle("DotParentesis");
-        lblDp.setSize("100px", "20px");
-        dpPanel.add(lblDp);
-
-        this.txtDp.setSize("400px", "20px");
-        dpPanel.add(this.txtDp);
-
-        final ChangeHandler dpChangeHandler = new ChangeHandler() {
-            @Override
-            public void onChange(ChangeEvent event) {
-                try {
-                    Prop_Strands.this.rnass.setRNAssDotParentheses(Prop_Strands.this.txtDp.getText());
-                } catch (final RNAException e) {
-                    Prop_Strands.this.txtDp.setText(Prop_Strands.this.rnass.getDotParentesis());
-                }
-            }
-        };
-        this.txtDp.addChangeHandler(dpChangeHandler);
-
-        // // Block for nucleotide entry
-        final HorizontalPanel nucPanel = new HorizontalPanel();
-        nucPanel.setSize("500px", "20px");
-        this.basePropertiesPanel.add(nucPanel);
-
-        final Label lblNuc = new Label("Sequence");
-        lblNuc.setSize("100px", "20px");
-        nucPanel.add(lblNuc);
-
-        this.txtNuc.setSize("400px", "20px");
-        nucPanel.add(this.txtNuc);
-
-        final ChangeHandler seqChangeHandler = new ChangeHandler() {
-            @Override
-            public void onChange(ChangeEvent event) {
-                try {
-                    Prop_Strands.this.rnass.setRNAssSequence(Prop_Strands.this.txtNuc.getText());
-                } catch (final RNAException e) {
-                    Prop_Strands.this.txtNuc.setText(Prop_Strands.this.rnass.getSequence());
-                }
-            }
-        };
-        this.txtNuc.addChangeHandler(seqChangeHandler);
-
-        // ADD AUTOUPDATER TO THE NAME TEXTBOX
         final KeyUpHandler nameUpHandler = new KeyUpHandler() {
             @Override
             public void onKeyUp(KeyUpEvent event) {
@@ -154,8 +84,79 @@ public class Prop_Strands extends AbsolutePanel {
             }
         };
         this.txtName.addKeyPressHandler(namePressHandler);
+    }
+
+    private void setTextBoxStructure() {
+        this.txtStructure = new TextBox();
+        this.txtStructure.setSize("400px", "20px");
+
+        // ADD FILTER TO THE Structure TEXTBOX
+        final ChangeHandler dpChangeHandler = new ChangeHandler() {
+            @Override
+            public void onChange(ChangeEvent event) {
+                try {
+                    Prop_Strands.this.rnass.setRNAssDotParentheses(Prop_Strands.this.txtStructure.getText());
+                } catch (final RNAException e) {
+                    Prop_Strands.this.txtStructure.setText(Prop_Strands.this.rnass.getDotParentesis());
+                }
+            }
+        };
+        this.txtStructure.addChangeHandler(dpChangeHandler);
+
+        final Set<Character> strucAllowedChars = new TreeSet<Character>();
+        strucAllowedChars.add('.');
+        strucAllowedChars.add('(');
+        strucAllowedChars.add(')');
+
+        final KeyUpHandler structUpHandler = new KeyUpHandler() {
+            @Override
+            public void onKeyUp(KeyUpEvent event) {
+                if (Prop_Strands.this.updateStruct || KeyCodes.KEY_DELETE == event.getNativeKeyCode() || KeyCodes.KEY_BACKSPACE == event.getNativeKeyCode()) {
+                    Prop_Strands.this.updateStruct = false;
+                    try {
+                        Prop_Strands.this.rnass.setRNAssDotParentheses(Prop_Strands.this.txtStructure.getText());
+                    } catch (final RNAIncompleteException e) {
+
+                    } catch (final RNAException e) {
+                        Prop_Strands.this.txtStructure.cancelKey();
+                    }
+                }
+            }
+        };
+        this.txtStructure.addKeyUpHandler(structUpHandler);
+
+        final KeyPressHandler structPressHandler = new KeyPressHandler() {
+            @Override
+            public void onKeyPress(KeyPressEvent event) {
+                final Character c = event.getCharCode();
+
+                if (strucAllowedChars.contains(c)) {
+                    Prop_Strands.this.updateStruct = true;
+                } else {
+                    Prop_Strands.this.txtStructure.cancelKey();
+                }
+            }
+        };
+        this.txtStructure.addKeyPressHandler(structPressHandler);
+    }
+
+    private void setTextBoxSequence() {
+        this.txtSequence = new TextBox();
+        this.txtSequence.setSize("400px", "20px");
 
         // ADD FILTER TO THE SEQUENCE TEXTBOX
+        final ChangeHandler seqChangeHandler = new ChangeHandler() {
+            @Override
+            public void onChange(ChangeEvent event) {
+                try {
+                    Prop_Strands.this.rnass.setRNAssSequence(Prop_Strands.this.txtSequence.getText());
+                } catch (final RNAException e) {
+                    Prop_Strands.this.txtSequence.setText(Prop_Strands.this.rnass.getSequence());
+                }
+            }
+        };
+        this.txtSequence.addChangeHandler(seqChangeHandler);
+
         final Set<Character> seqAllowedChars = new TreeSet<Character>();
         seqAllowedChars.add('G');
         seqAllowedChars.add('A');
@@ -168,16 +169,16 @@ public class Prop_Strands extends AbsolutePanel {
             public void onKeyUp(KeyUpEvent event) {
                 if (Prop_Strands.this.updateSeq || KeyCodes.KEY_DELETE == event.getNativeKeyCode() || KeyCodes.KEY_BACKSPACE == event.getNativeKeyCode()) {
                     Prop_Strands.this.updateSeq = false;
-                    Prop_Strands.this.txtNuc.setText(Prop_Strands.this.txtNuc.getText().toUpperCase());
+                    Prop_Strands.this.txtSequence.setText(Prop_Strands.this.txtSequence.getText().toUpperCase());
                     try {
-                        Prop_Strands.this.rnass.setRNAssSequence(Prop_Strands.this.txtNuc.getText());
+                        Prop_Strands.this.rnass.setRNAssSequence(Prop_Strands.this.txtSequence.getText());
                     } catch (final RNAException e) {
-                        Prop_Strands.this.txtNuc.cancelKey();
+                        Prop_Strands.this.txtSequence.cancelKey();
                     }
                 }
             }
         };
-        this.txtNuc.addKeyUpHandler(seqUpHandler);
+        this.txtSequence.addKeyUpHandler(seqUpHandler);
 
         final KeyPressHandler seqPressHandler = new KeyPressHandler() {
             @Override
@@ -187,60 +188,15 @@ public class Prop_Strands extends AbsolutePanel {
                 if (seqAllowedChars.contains(c)) {
                     Prop_Strands.this.updateSeq = true;
                 } else {
-                    Prop_Strands.this.txtNuc.cancelKey();
+                    Prop_Strands.this.txtSequence.cancelKey();
                 }
             }
         };
-        this.txtNuc.addKeyPressHandler(seqPressHandler);
+        this.txtSequence.addKeyPressHandler(seqPressHandler);
+    }
 
-        // ADD FILTER TO THE Structure TEXTBOX
-        final Set<Character> strucAllowedChars = new TreeSet<Character>();
-        strucAllowedChars.add('.');
-        strucAllowedChars.add('(');
-        strucAllowedChars.add(')');
-
-        final KeyUpHandler structUpHandler = new KeyUpHandler() {
-            @Override
-            public void onKeyUp(KeyUpEvent event) {
-                if (Prop_Strands.this.updateStruct || KeyCodes.KEY_DELETE == event.getNativeKeyCode() || KeyCodes.KEY_BACKSPACE == event.getNativeKeyCode()) {
-                    Prop_Strands.this.updateStruct = false;
-                    try {
-                        Prop_Strands.this.rnass.setRNAssDotParentheses(Prop_Strands.this.txtDp.getText());
-                    } catch (final RNAIncompleteException e) {
-
-                    } catch (final RNAException e) {
-                        if (!e.getMessage().equals("Parentheses are not matching.") && !e.getMessage().startsWith("Missing")) {
-                            Prop_Strands.this.txtDp.cancelKey();
-                        }
-                    }
-                }
-            }
-        };
-        this.txtDp.addKeyUpHandler(structUpHandler);
-
-        final KeyPressHandler structPressHandler = new KeyPressHandler() {
-            @Override
-            public void onKeyPress(KeyPressEvent event) {
-                final Character c = event.getCharCode();
-
-                if (strucAllowedChars.contains(c)) {
-                    Prop_Strands.this.updateStruct = true;
-                } else {
-                    Prop_Strands.this.txtDp.cancelKey();
-                }
-            }
-        };
-        this.txtDp.addKeyPressHandler(structPressHandler);
-
-        // Dropdown for color type
-        final HorizontalPanel oPanel = new HorizontalPanel();
-        oPanel.setSize("500px", "20px");
-        this.basePropertiesPanel.add(oPanel);
-
-        final Label lblCol = new Label("Colors :");
-        lblCol.setSize("50px", "20px");
-        oPanel.add(lblCol);
-
+    private void setListBoxColor() {
+        this.lbColor = new ListBox();
         this.lbColor.setSize("200px", "20px");
 
         this.lbColor.addItem("JADE", "#00A86B");
@@ -255,7 +211,6 @@ public class Prop_Strands extends AbsolutePanel {
         this.lbColor.addItem("TEAL", Color.TEAL.toHex());
         this.lbColor.addItem("BLACK", Color.BLACK.toHex());
         this.lbColor.addItem("FUCHSIA", Color.FUCHSIA.toHex());
-        oPanel.add(this.lbColor);
 
         final ChangeHandler colorChangeHandler = new ChangeHandler() {
             @Override
@@ -264,17 +219,15 @@ public class Prop_Strands extends AbsolutePanel {
             }
         };
         this.lbColor.addChangeHandler(colorChangeHandler);
+    }
 
-        // Add the style list
-        final Label lblStyle = new Label("Style :");
-        lblStyle.setSize("50px", "20px");
-        oPanel.add(lblStyle);
-
+    private void setListBoxStyle() {
+        this.lbStyle = new ListBox();
         this.lbStyle.setSize("200px", "20px");
+
         for (final RNAssDrawable.DrawStyle r : RNAssDrawable.DrawStyle.values()) {
             this.lbStyle.addItem(r.name().replace("_", " "), r.name());
         }
-        oPanel.add(this.lbStyle);
 
         final ChangeHandler styleChangeHandler = new ChangeHandler() {
             @Override
@@ -283,10 +236,79 @@ public class Prop_Strands extends AbsolutePanel {
             }
         };
         this.lbStyle.addChangeHandler(styleChangeHandler);
+    }
 
-        final HorizontalPanel okCancelPanel = new HorizontalPanel();
-        okCancelPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-        okCancelPanel.setWidth("500px");
+    private void init() {
+        clear();
+        this.basePropertiesPanel = new VerticalPanel();
+        this.basePropertiesPanel.setBorderWidth(0);
+        this.basePropertiesPanel.setSize("500px", "125px");
+        this.add(this.basePropertiesPanel);
+
+        setTextBoxName();
+        setTextBoxStructure();
+        setTextBoxSequence();
+        setListBoxColor();
+        setListBoxStyle();
+        setListBoxStyle();
+
+        // #########################################
+        // Block for name panel
+        final HorizontalPanel namePanel = new HorizontalPanel();
+        namePanel.setWidth("500px");
+        this.basePropertiesPanel.add(namePanel);
+
+        final Label lblName = new Label("Name");
+        lblName.setSize("100px", "20px");
+        namePanel.add(lblName);
+        namePanel.add(this.txtName);
+
+        // #########################################
+        // Block for dp entry
+        final HorizontalPanel dpPanel = new HorizontalPanel();
+        dpPanel.setWidth("500px");
+        this.basePropertiesPanel.add(dpPanel);
+
+        final Label lblDp = new Label("Structure");
+        lblDp.setTitle("DotParentesis");
+        lblDp.setSize("100px", "20px");
+        dpPanel.add(lblDp);
+        dpPanel.add(this.txtStructure);
+
+        // #########################################
+        // Block for sequence entry
+        final HorizontalPanel nucPanel = new HorizontalPanel();
+        nucPanel.setSize("500px", "20px");
+        this.basePropertiesPanel.add(nucPanel);
+
+        final Label lblNuc = new Label("Sequence");
+        lblNuc.setSize("100px", "20px");
+        nucPanel.add(lblNuc);
+        nucPanel.add(this.txtSequence);
+
+        // #########################################
+        // Dropdown for color type
+        final HorizontalPanel oPanel = new HorizontalPanel();
+        oPanel.setSize("500px", "20px");
+        this.basePropertiesPanel.add(oPanel);
+
+        final Label lblCol = new Label("Colors :");
+        lblCol.setSize("50px", "20px");
+        oPanel.add(lblCol);
+        oPanel.add(this.lbColor);
+
+        // #########################################
+        // Add the style list
+        final Label lblStyle = new Label("Style :");
+        lblStyle.setSize("50px", "20px");
+        oPanel.add(lblStyle);
+        oPanel.add(this.lbStyle);
+
+        // #########################################
+        // Add the action button panel
+        final HorizontalPanel actionButtonPanel = new HorizontalPanel();
+        actionButtonPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+        actionButtonPanel.setWidth("500px");
 
         // CANCEL BUTTON
         final Image iH = new Image(this.imagesBundle.hideButtonIcon());
@@ -296,9 +318,9 @@ public class Prop_Strands extends AbsolutePanel {
                 getParent().getParent().setVisible(false);
             }
         };
-        okCancelPanel.add(this.btnHide);
+        actionButtonPanel.add(this.btnHide);
 
-        this.basePropertiesPanel.add(okCancelPanel);
+        this.basePropertiesPanel.add(actionButtonPanel);
 
         DOM.setStyleAttribute(getElement(), "border", "1px solid grey");
         DOM.setStyleAttribute(getElement(), "background", "#e3e8f3");
@@ -326,8 +348,8 @@ public class Prop_Strands extends AbsolutePanel {
         init();
         this.rnass = po;
         this.txtName.setText(po.getName());
-        this.txtDp.setText(po.getDotParentesis());
-        this.txtNuc.setText(po.getSequence());
+        this.txtStructure.setText(po.getDotParentesis());
+        this.txtSequence.setText(po.getSequence());
 
         for (int i = 0; i < this.lbColor.getItemCount(); i++) {
             if (this.lbColor.getValue(i).equals(po.getColor().toHex())) {
