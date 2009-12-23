@@ -52,9 +52,9 @@ public class GenUS extends AbsolutePanel implements EntryPoint {
      */
     public void onModuleLoad() {
         // Setup the browser window
-        // Window.enableScrolling(false);
+        Window.enableScrolling(false);
         Window.setMargin("0px");
-        Window.setTitle("RNA Secondary Strand Viewer");
+        Window.setTitle("GenUS : Genetic profiling tool");
 
         // Setup the root panel
         RootPanel.get().setSize("100%", "100%");
