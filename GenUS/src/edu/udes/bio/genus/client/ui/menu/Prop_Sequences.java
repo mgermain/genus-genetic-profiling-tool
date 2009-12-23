@@ -118,7 +118,7 @@ public class Prop_Sequences extends AbsolutePanel {
             @Override
             public void onChange(ChangeEvent event) {
                 try {
-                    Prop_Sequences.this.rnass.setRNAssGACU(Prop_Sequences.this.txtNuc.getText());
+                    Prop_Sequences.this.rnass.setRNAssSequence(Prop_Sequences.this.txtNuc.getText());
                     Prop_Sequences.this.txtNuc.setText(Prop_Sequences.this.rnass.getSequence());
                 } catch (final RNAException e) {
                     // TODO dire un erreur
