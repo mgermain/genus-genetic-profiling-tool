@@ -32,7 +32,7 @@ public class Menu extends HorizontalPanel {
         this.menu.add(this.structMenu, "STRUCTURES");
 
         // Add the CONFIG sub menu
-        final MenuAlgo algoMenu = new MenuAlgo(195);
+        final Menu_Algo algoMenu = new Menu_Algo(195);
         this.menu.add(algoMenu, "ALGORITHMS");
 
         // // Add the CONFIG sub menu
