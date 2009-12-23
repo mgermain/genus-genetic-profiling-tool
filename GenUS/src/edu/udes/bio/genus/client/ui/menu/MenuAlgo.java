@@ -27,7 +27,7 @@ public class MenuAlgo extends Composite {
     private static final String[] algoNames = { "Match Algorithm" };
     private static final AlgoWidgetMaker[] algoClasses = { new MatchAlgoWidgetMaker() };
 
-    public MenuAlgo(int pxWidth) {
+    public MenuAlgo(int pxWidth) {//
         super();
 
         VerticalPanel vp;

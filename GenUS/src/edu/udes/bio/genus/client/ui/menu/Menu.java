@@ -15,7 +15,7 @@ public class Menu extends HorizontalPanel {
         setSize("220px", "100%");
 
         // create the menu with a stack panel
-        this.menu.setSize("100%", "100%");
+        this.menu.setSize("100%", "100%");//
         add(this.menu);
 
         // Creating the RNA STRANDS sections
