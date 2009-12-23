@@ -9,6 +9,9 @@ public class Menu extends HorizontalPanel {
 
     private final StackPanel menu = new StackPanel();
 
+    final public Menu_Sequences seqMenu = new Menu_Sequences();
+    final public Menu_Configs structMenu = new Menu_Configs();
+
     public Menu() {
         super();
 
@@ -23,12 +26,10 @@ public class Menu extends HorizontalPanel {
         this.menu.add(strandMenu, "RNA STRANDS");
 
         // Add the CONFIG sub menu
-        final Menu_Sequences seqMenu = new Menu_Sequences();
-        this.menu.add(seqMenu, "SEQUENCES");
+        this.menu.add(this.seqMenu, "SEQUENCES");
 
         // Add the CONFIG sub menu
-        final Menu_Configs structMenu = new Menu_Configs();
-        this.menu.add(structMenu, "STRUCTURES");
+        this.menu.add(this.structMenu, "STRUCTURES");
 
         // Add the CONFIG sub menu
         final MenuAlgo algoMenu = new MenuAlgo(195);
