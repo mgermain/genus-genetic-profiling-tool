@@ -15,16 +15,15 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
+import edu.udes.bio.genus.client.GenUS;
+
 public class Sequence extends HorizontalPanel {
 
     private final Label sName = new Label();
     public String name = "";
-    public String sequence = "";//
+    public String sequence = "";
 
     public interface StrandImageBundle extends ClientBundle {
-        @Source("details.png")
-        public ImageResource detailsButtonIcon();
-
         @Source("red_x.png")
         public ImageResource cancelButtonIcon();
     }
@@ -46,21 +45,9 @@ public class Sequence extends HorizontalPanel {
         setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 
         // Create and setup label for the name of the strand
-        this.sName.setPixelSize(148, 20);
+        this.sName.setPixelSize(164, 20);
         updateName();
         add(this.sName);
-
-        // Create and setup Edit button
-        final Image iE = new Image(this.imagesBundle.detailsButtonIcon());
-        final CustomButton btnEdit = new CustomButton(iE) {
-            @Override
-            protected void onClick() {
-                Sequence.this.removeFromParent();
-            }
-        };
-        btnEdit.setPixelSize(16, 16);
-        btnEdit.setTitle("Details");
-        add(btnEdit);
 
         // TODO Include the image in the project
         final Image iD = new Image(this.imagesBundle.cancelButtonIcon());
@@ -68,7 +55,7 @@ public class Sequence extends HorizontalPanel {
             @Override
             protected void onClick() {
                 if (DOM.eventGetCtrlKey(DOM.eventGetCurrentEvent()) || Window.confirm("Are you sure you want to delete this strand ?")) {
-                    removeFromParent();
+                    GenUS.mainMenu.seqMenu.removeSequence(Sequence.this);
                 }
             }
         };
