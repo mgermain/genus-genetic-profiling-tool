@@ -21,8 +21,12 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.SuggestOracle.Callback;
+import com.google.gwt.user.client.ui.SuggestOracle.Request;
+import com.google.gwt.user.client.ui.SuggestOracle.Response;
 import com.objetdirect.tatami.client.gfx.Color;
 
 import edu.udes.bio.genus.client.GenUS;
@@ -90,6 +94,19 @@ public class Prop_Strands extends AbsolutePanel {
         this.txtStructure = new TextBox();
         this.txtStructure.setSize("400px", "20px");
 
+        final MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
+        for (final Structure s : GenUS.mainMenu.structMenu.structList) {
+            oracle.add(s.structure);
+        }
+
+        final Callback cb = new Callback() {
+            @Override
+            public void onSuggestionsReady(Request request, Response response) {
+                // TODO Auto-generated method stub
+                
+            }
+        };
+
         // ADD FILTER TO THE Structure TEXTBOX
         final ChangeHandler dpChangeHandler = new ChangeHandler() {
             @Override
@@ -121,6 +138,8 @@ public class Prop_Strands extends AbsolutePanel {
                         Prop_Strands.this.txtStructure.cancelKey();
                     }
                 }
+
+                oracle.requestSuggestions(new Request(Prop_Strands.this.txtStructure.getText()), cb);
             }
         };
         this.txtStructure.addKeyUpHandler(structUpHandler);
