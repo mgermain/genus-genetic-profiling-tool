@@ -135,7 +135,9 @@ public class MatchDialog extends DialogBox {
     public void sendCancel() {
         Image img;
 
-        this.algoRequest.cancel();
+        if (this.parent.started == true) {
+            this.algoRequest.cancel();
+        }
         if (this.parent != null) {
             MatchDialog.this.parent.imageContainer.clear();
         }
@@ -145,7 +147,10 @@ public class MatchDialog extends DialogBox {
             MatchDialog.this.parent.imageContainer.add(img);
         }
 
-        this.resolverService.stopAlgo(this.currID, new CancelCallback());
+        if (this.parent.started == true) {
+            this.resolverService.stopAlgo(this.currID, new CancelCallback());
+        }
+
     }
 
     private class CancelCallback implements AsyncCallback<Void> {
