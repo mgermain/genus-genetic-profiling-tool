@@ -69,6 +69,11 @@ public class RNAss extends AbstractCollection<Nucleotide> implements Serializabl
         setSequence(sequence);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.util.AbstractCollection#size()
+     */
     @Override
     public int size() {
         if (this.nucleotideChain != null) {
@@ -77,6 +82,11 @@ public class RNAss extends AbstractCollection<Nucleotide> implements Serializabl
         return 0;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.util.AbstractCollection#iterator()
+     */
     @Override
     public Iterator<Nucleotide> iterator() {
         if (this.nucleotideChain != null) {
@@ -113,9 +123,11 @@ public class RNAss extends AbstractCollection<Nucleotide> implements Serializabl
      * @throws RNAException
      */
     public void setDotParentesis(String dotParentesis) throws RNAException {
-        validateDotParentesese(dotParentesis);
+        final String seq = getSequence();
+        RNAss.validateDotParenthisis(dotParentesis);
         this.nucleotideChain.clear();
         fromDotParentheses(dotParentesis);
+        setSequence(seq);
     }
 
     /**
@@ -132,18 +144,6 @@ public class RNAss extends AbstractCollection<Nucleotide> implements Serializabl
     }
 
     /**
-     * Validate sequence.
-     * 
-     * @param seq
-     *            the sequence
-     * 
-     * @return true, if matches [GACU ]
-     */
-    public boolean validateSequence(String seq) {
-        return seq.matches("[GACU ]*?");
-    }
-
-    /**
      * Sets the sequence.
      * 
      * @param seq
@@ -153,7 +153,7 @@ public class RNAss extends AbstractCollection<Nucleotide> implements Serializabl
      */
     public void setSequence(String seq) throws RNAException {
         seq = seq.toUpperCase();
-        if (validateSequence(seq)) {
+        if (RNAss.validateSequence(seq)) {
             int i = 0;
             for (; i < seq.length() && i < this.nucleotideChain.size(); i++) {
                 this.nucleotideChain.get(i).ribose = seq.charAt(i);
@@ -166,7 +166,26 @@ public class RNAss extends AbstractCollection<Nucleotide> implements Serializabl
         }
     }
 
-    private void validateDotParentesese(String structure) throws RNAException {
+    /**
+     * Validate sequence.
+     * 
+     * @param seq
+     *            the sequence
+     * 
+     * @return true, if matches [GACU ]
+     */
+    public static boolean validateSequence(String seq) {
+        return seq.matches("[GACU ]*?");
+    }
+
+    /**
+     * Validate dot parenthesis.
+     * 
+     * @param structure
+     * 
+     * @throws RNAException
+     */
+    public static void validateDotParenthisis(String structure) throws RNAException {
         int p = 0;
 
         if (!(structure.matches("[().]*?"))) {

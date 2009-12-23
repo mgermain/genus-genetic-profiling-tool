@@ -20,6 +20,7 @@
 package edu.udes.bio.genus.client.rna;
 
 import com.objetdirect.tatami.client.gfx.Circle;
+import com.objetdirect.tatami.client.gfx.Color;
 import com.objetdirect.tatami.client.gfx.Text;
 
 /**
@@ -53,6 +54,7 @@ public class NucleotideGO extends com.objetdirect.tatami.client.gfx.VirtualGroup
         this.ribose = new Text(ribose);
         this.nucleotide = new Circle(radius);
         this.ribose.translate(-this.radius / 2, this.radius / 2).scale(1.5f);
+        this.ribose.setStrokeColor(Color.WHITE);
         add(this.nucleotide);
         add(this.ribose);
     }
