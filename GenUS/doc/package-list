@@ -1,0 +1,8 @@
+edu.udes.bio.genus.client
+edu.udes.bio.genus.client.algo
+edu.udes.bio.genus.client.algo.match
+edu.udes.bio.genus.client.pool
+edu.udes.bio.genus.client.rna
+edu.udes.bio.genus.client.ui.canvas
+edu.udes.bio.genus.client.ui.menu
+edu.udes.bio.genus.server
