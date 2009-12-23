@@ -19,7 +19,7 @@ public class Sequence extends HorizontalPanel {
 
     private final Label sName = new Label();
     public String name = "";
-    public String sequence = "";
+    public String sequence = "";//
 
     public interface StrandImageBundle extends ClientBundle {
         @Source("details.png")

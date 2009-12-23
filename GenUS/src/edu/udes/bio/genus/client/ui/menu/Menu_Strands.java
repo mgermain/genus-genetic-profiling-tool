@@ -21,7 +21,7 @@ public class Menu_Strands extends VerticalPanel implements IPoolObserver {
 
     public Menu_Strands() {
         super();
-
+        //
         // Setup base panel
         setWidth("195px");
         setBorderWidth(0);

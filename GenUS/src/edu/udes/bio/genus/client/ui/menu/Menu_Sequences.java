@@ -27,7 +27,7 @@ public class Menu_Sequences extends VerticalPanel {
             public void onClick(ClickEvent event) {
                 final Prop_Sequences p = new Prop_Sequences();
                 p.show();
-            }
+            }//
         }
         final Button btnAddStrands = new Button("Add Sequence", new AddRnaStrandButtonClick());
         btnAddStrands.setWidth("80%");

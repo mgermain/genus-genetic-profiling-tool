@@ -175,7 +175,7 @@ public class Prop_Strands extends AbsolutePanel {
                     } catch (final RNAException e) {
                         Prop_Strands.this.txtSequence.cancelKey();
                     }
-                }
+                }//
             }
         };
         this.txtSequence.addKeyUpHandler(seqUpHandler);

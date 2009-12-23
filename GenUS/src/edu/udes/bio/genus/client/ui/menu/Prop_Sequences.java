@@ -53,7 +53,6 @@ public class Prop_Sequences extends PopupPanel {
                     Prop_Sequences.this.sequence = Prop_Sequences.this.txtSequence.getText().toUpperCase();
                     Prop_Sequences.this.txtSequence.setText(Prop_Sequences.this.sequence);
                 }
-                
 
             }
         };
@@ -61,7 +60,7 @@ public class Prop_Sequences extends PopupPanel {
     }
 
     public Prop_Sequences() {
-        center();
+        center();//
         setModal(true);
 
         // setTextBoxName();

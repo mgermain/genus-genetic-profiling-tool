@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.SimpleCheckBox;
 import edu.udes.bio.genus.client.GenUS;
 import edu.udes.bio.genus.client.rna.RNAssDrawable;
 
-public class Strand extends HorizontalPanel {
+public class Strand extends HorizontalPanel {//
 
     private RNAssDrawable poolObj = null;
     private final SimpleCheckBox cbxDisplay = new SimpleCheckBox();
