@@ -61,9 +61,9 @@ public class DrawerListener implements GraphicObjectListener {
         int newX, newY, xMove, yMove;
 
         if (graphicObject != null) {
-            this.dr.setStyleName("pointerCursor");
-        } else {
             this.dr.setStyleName("moveCursor");
+        } else {
+            this.dr.setStyleName("pointerCursor");
         }
 
         if (this.holding == true) {
