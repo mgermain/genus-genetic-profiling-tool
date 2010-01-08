@@ -30,6 +30,8 @@ import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.DOM;
@@ -41,11 +43,10 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
+import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.SuggestOracle.Callback;
-import com.google.gwt.user.client.ui.SuggestOracle.Request;
-import com.google.gwt.user.client.ui.SuggestOracle.Response;
+import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 import com.objetdirect.tatami.client.gfx.Color;
 
 import edu.udes.bio.genus.client.GenUS;
@@ -63,8 +64,8 @@ public class Prop_Strands extends AbsolutePanel {
     private boolean updateSeq = false;
 
     private TextBox txtName = null;
-    private TextBox txtStructure = null;
-    private TextBox txtSequence = null;
+    private SuggestBox txtStructure = null;
+    private SuggestBox txtSequence = null;
     private ListBox lbColor = null;
     private ListBox lbStyle = null;
     private CustomButton btnHide = null;
@@ -122,21 +123,28 @@ public class Prop_Strands extends AbsolutePanel {
     }
 
     private void setTextBoxStructure() {
-        this.txtStructure = new TextBox();
-        this.txtStructure.setSize("400px", "20px");
-
         final MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
         for (final Structure s : GenUS.mainMenu.structMenu.structList) {
             oracle.add(s.structure);
         }
 
-        final Callback cb = new Callback() {
-            @Override
-            public void onSuggestionsReady(Request request, Response response) {
-            // TODO Auto-generated method stub
+        this.txtStructure = new SuggestBox(oracle);
+        this.txtStructure.setSize("400px", "20px");
+        this.txtStructure.setAnimationEnabled(true);
+        this.txtStructure.setAutoSelectEnabled(true);
 
+        // Check validity and update RNAss when selection in suggestBox
+        final SelectionHandler<Suggestion> sh = new SelectionHandler<Suggestion>() {
+            @Override
+            public void onSelection(SelectionEvent<Suggestion> event) {
+                try {
+                    Prop_Strands.this.rnass.setRNAssDotParentheses(event.getSelectedItem().getReplacementString());
+                } catch (final RNAException e) {
+                    Prop_Strands.this.txtStructure.setText(Prop_Strands.this.rnass.getDotParentesis());
+                }
             }
         };
+        this.txtStructure.addSelectionHandler(sh);
 
         // ADD FILTER TO THE Structure TEXTBOX
         final ChangeHandler dpChangeHandler = new ChangeHandler() {
@@ -149,7 +157,7 @@ public class Prop_Strands extends AbsolutePanel {
                 }
             }
         };
-        this.txtStructure.addChangeHandler(dpChangeHandler);
+        this.txtStructure.getTextBox().addChangeHandler(dpChangeHandler);
 
         final Set<Character> strucAllowedChars = new TreeSet<Character>();
         strucAllowedChars.add('.');
@@ -166,11 +174,9 @@ public class Prop_Strands extends AbsolutePanel {
                     } catch (final RNAIncompleteException e) {
 
                     } catch (final RNAException e) {
-                        Prop_Strands.this.txtStructure.cancelKey();
+                        Prop_Strands.this.txtStructure.getTextBox().cancelKey();
                     }
                 }
-
-                oracle.requestSuggestions(new Request(Prop_Strands.this.txtStructure.getText()), cb);
             }
         };
         this.txtStructure.addKeyUpHandler(structUpHandler);
@@ -183,7 +189,7 @@ public class Prop_Strands extends AbsolutePanel {
                 if (strucAllowedChars.contains(c)) {
                     Prop_Strands.this.updateStruct = true;
                 } else {
-                    Prop_Strands.this.txtStructure.cancelKey();
+                    Prop_Strands.this.txtStructure.getTextBox().cancelKey();
                 }
             }
         };
@@ -191,8 +197,28 @@ public class Prop_Strands extends AbsolutePanel {
     }
 
     private void setTextBoxSequence() {
-        this.txtSequence = new TextBox();
+        final MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
+        for (final Sequence s : GenUS.mainMenu.seqMenu.seqList) {
+            oracle.add(s.sequence);
+        }
+
+        this.txtSequence = new SuggestBox(oracle);
         this.txtSequence.setSize("400px", "20px");
+        this.txtSequence.setAnimationEnabled(true);
+        this.txtSequence.setAutoSelectEnabled(true);
+
+        // Check validity and update RNAss when selection in suggestBox
+        final SelectionHandler<Suggestion> sh = new SelectionHandler<Suggestion>() {
+            @Override
+            public void onSelection(SelectionEvent<Suggestion> event) {
+                try {
+                    Prop_Strands.this.rnass.setRNAssSequence(event.getSelectedItem().getReplacementString());
+                } catch (final RNAException e) {
+                    Prop_Strands.this.txtStructure.setText(Prop_Strands.this.rnass.getSequence());
+                }
+            }
+        };
+        this.txtSequence.addSelectionHandler(sh);
 
         // ADD FILTER TO THE SEQUENCE TEXTBOX
         final ChangeHandler seqChangeHandler = new ChangeHandler() {
@@ -205,7 +231,7 @@ public class Prop_Strands extends AbsolutePanel {
                 }
             }
         };
-        this.txtSequence.addChangeHandler(seqChangeHandler);
+        this.txtSequence.getTextBox().addChangeHandler(seqChangeHandler);
 
         final Set<Character> seqAllowedChars = new TreeSet<Character>();
         seqAllowedChars.add('G');
@@ -223,7 +249,7 @@ public class Prop_Strands extends AbsolutePanel {
                     try {
                         Prop_Strands.this.rnass.setRNAssSequence(Prop_Strands.this.txtSequence.getText());
                     } catch (final RNAException e) {
-                        Prop_Strands.this.txtSequence.cancelKey();
+                        Prop_Strands.this.txtSequence.getTextBox().cancelKey();
                     }
                 }//
             }
@@ -238,7 +264,7 @@ public class Prop_Strands extends AbsolutePanel {
                 if (seqAllowedChars.contains(c)) {
                     Prop_Strands.this.updateSeq = true;
                 } else {
-                    Prop_Strands.this.txtSequence.cancelKey();
+                    Prop_Strands.this.txtSequence.getTextBox().cancelKey();
                 }
             }
         };

@@ -53,13 +53,13 @@ public class Menu extends HorizontalPanel {
         final Menu_Strands strandMenu = new Menu_Strands();
         this.menu.add(strandMenu, "RNA STRANDS");
 
-        // Add the CONFIG sub menu
-        this.menu.add(this.seqMenu, "SEQUENCES");
-
-        // Add the CONFIG sub menu
+        // Add the STRUCTURES sub menu
         this.menu.add(this.structMenu, "STRUCTURES");
 
-        // Add the CONFIG sub menu
+        // Add the SEQUENCES sub menu
+        this.menu.add(this.seqMenu, "SEQUENCES");
+
+        // Add the ALGORITHMS sub menu
         final Menu_Algo algoMenu = new Menu_Algo(195);
         this.menu.add(algoMenu, "ALGORITHMS");
 
