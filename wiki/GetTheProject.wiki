@@ -1,0 +1,25 @@
+#summary Different ways to get the project.
+== Setup the development environement ==
+ * Install [http://www.eclipse.org/downloads/ Eclipse] (Eclipse IDE for Java Developers)
+ * Install Google Web Toolkit([http://code.google.com/intl/fr-CA/eclipse/docs/download.html GWT]) plugin for Eclipse
+
+
+== Get the projet from the svn repository ==
+ * Install Subversive plugin for Eclipse, see details on versions in file [http://code.google.com/p/genus-genetic-profiling-tool/downloads/list "Eclipse Plugins installed.png"]
+ * Checkout the project: [http://code.google.com/p/genus-genetic-profiling-tool/source/checkout svn checkout]
+
+Note : In order to be able to commit modification, you must be in the projet owner or commiter list.
+
+
+== Get the project from the .zip archive ==
+ * Get the file [http://code.google.com/p/genus-genetic-profiling-tool/downloads/list "GenUS(src).zip"]
+ * Extract the achive and create a new Eclipse Java Project from the extracted folder
+
+
+== To run the project in "development mode" ==
+ * Eclipse->Run as-> web application : it should output an URL (http://localhost:8888/GenUS.html?gwt.codesvr=132.210.47.18:9997)
+ * Open the URL in a browser (it will request the Google Web Toolkit Developer Plugin)
+
+== To run the project in "compiled mode" (standalone) ==
+ * Eclipse->GWT compile project
+ * Open GenUS\war\GenUS.html
