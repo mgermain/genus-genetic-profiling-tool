@@ -1,6 +1,6 @@
 /*
  * GenUS: Genetic Profiling Tool v.1.0
- * Copyright (C) 2009 Université de Sherbrooke
+ * Copyright (C) 2009 Universitï¿½ de Sherbrooke
  * Contact: code.google.com/p/genus-genetic-profiling-tool/
  * 
  * This is a free software; you can redistribute it and/or
@@ -175,7 +175,8 @@ public class RNAss extends AbstractCollection<Nucleotide> implements Serializabl
      * @return true, if matches [GACU ]
      */
     public static boolean validateSequence(String seq) {
-        return seq.matches("[GACU ]*?");
+        return seq.matches("(G|A|C|U|\\s)*");
+        // return seq.matches("[GACU ]*?");
     }
 
     /**
@@ -188,7 +189,8 @@ public class RNAss extends AbstractCollection<Nucleotide> implements Serializabl
     public static void validateDotParenthisis(String structure) throws RNAException {
         int p = 0;
 
-        if (!(structure.matches("[().]*?"))) {
+        // if (!(structure.matches("[().]*?"))) {
+        if (!(structure.matches("(\\(|\\)|\\.)*"))) {
             throw new RNAException(structure + " contains invalid characters.");
         }
 
